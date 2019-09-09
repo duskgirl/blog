@@ -1,0 +1,22 @@
+.nav_pagination {
+  height: 34px;
+  background-color: #fff;
+  margin: 40px 0 0 0;
+  padding: 40px;
+}
+.nav_pagination .pagination {
+  margin-top: -15px;
+  height: 34px;
+}
+.nav_pagination .pagination li a {
+  color: #444;
+  border: solid 1px #ddd;
+}
+.nav_pagination .pagination li a:hover {
+  background-color: #17a2b8;
+  color: #fff;
+}
+.nav_pagination .pagination li.active a {
+  background-color: #17a2b8;
+  color: #fff;
+}

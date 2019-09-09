@@ -1,0 +1,52 @@
+@import 'var';
+@import 'common';
+    .blog_admin_sidebar {
+      position:absolute;
+      top:60px;
+      width:180px;
+      height:100%;
+      background-color:#035d6b;
+      ul {
+        width:100%;
+        height:100%;
+        li {
+          width:100%;
+          margin-top:15px;
+          img {
+            margin-left:25%;
+            width:50%;
+            height:50%;
+            border-radius: 50%;
+          }
+          span {
+            display: block;
+            margin-top:10px;
+            color:#fff;
+            width:100%;
+            text-align:center;
+            font-size:12px;
+          }
+          a {
+            font-size:16px;
+            color:#fff;
+            display: block;
+            width:100%;
+            height:100%;
+            text-align: center;
+            padding:5px 0;
+            &:hover {
+              background-color:#fff;
+              color:#035d6b;
+            }
+          }
+        }
+        li.active {
+          a {
+            background-color:#fff;
+            color:#035d6b;
+          }
+        }
+      }
+    }
+
+

@@ -1,0 +1,53 @@
+@import 'var';
+@import 'common';
+  .blog_admin_topbar {
+    background: @mainColor;
+    height:60px;
+    position: relative;
+    width:100%;
+    h1 {
+      margin:0;
+      height:60px;
+      background:url(../images/admin_logo.png) no-repeat;
+      background-size: auto 100%;
+      background-clip: content-box;
+      background-origin: content-box;
+    }
+    .nav_right{
+      position: absolute;
+      height:100%;
+      right:0;
+      overflow: hidden;
+      box-sizing: border-box;
+     form {
+       width:100%;
+       height:100%;
+       padding-top:13px;
+       padding-right:60px;
+       .input-group-btn {
+         .btn {
+          background: transparent;
+          color:#fff;
+          font-size:14px;
+          border-color:#fff;
+         }
+       }
+     }
+     .logout {
+      overflow: hidden;
+      position: absolute;
+      top:0;
+      right:0;
+      height:100%;
+      width:60px;
+      z-index:999;
+      a {
+        color:#fff;
+        display: inline-block;
+        height: 100%;
+        line-height: 60px;
+      }
+   }
+  }
+}
+

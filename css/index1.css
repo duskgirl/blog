@@ -1,0 +1,330 @@
+@charset "utf-8";
+html {
+  width: 100%;
+  height: 100%;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ul {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+  outline: 0 none;
+}
+a:link,
+a:visited {
+  text-decoration: none;
+}
+a:hover,
+a:active {
+  text-decoration: none;
+}
+button,
+input {
+  vertical-align: middle;
+}
+button {
+  cursor: pointer;
+}
+img {
+  border: 0 none;
+}
+@media (min-width: 320px) and (max-width: 768px) {
+  .blog_main .mainbar {
+    padding-right: 0;
+  }
+}
+@media (min-width: 768px) {
+  .blog_main {
+    padding-top: 40px;
+  }
+  .blog_main .mainbar {
+    padding-right: 300px;
+  }
+}
+body {
+  background-color: #edeff2;
+}
+.blog_topbar .container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.blog_topbar .navbar {
+  background-color: #fff;
+  border: none;
+}
+.blog_topbar .navbar-default .navbar-brand {
+  color: #17a2b8;
+  letter-spacing: 0.3em;
+  padding: 30px 40px;
+  font-size: 25px;
+  font-weight: 600;
+  text-shadow: 0 0 2px #fff, 0 -2px 4px #ff3, 1px -5px 6px #fd3, -1px -8px 8px #f80, 2px -13px 12px #fd5c63;
+}
+.blog_topbar .navbar-default .navbar-nav .active a {
+  background-color: transparent;
+  color: #17a2b8;
+}
+.blog_topbar .navbar-default .navbar-nav > li > a {
+  font-size: 16px;
+  color: #111;
+  font-weight: 600;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.blog_topbar .navbar-default .navbar-nav > li > a:hover {
+  background-color: #fff;
+  color: #17a2b8;
+}
+.blog_topbar .navbar-default .navbar-toggle {
+  margin-top: 20px;
+  margin-right: 40px;
+  border-color: #17a2b8;
+}
+.blog_topbar .navbar-default .navbar-toggle .icon-bar {
+  background-color: #17a2b8;
+}
+.banner {
+  padding-top: 80px;
+}
+.banner .carousel-control {
+  top: 80px;
+}
+.blog_main {
+  padding-left: 0;
+  position: relative;
+}
+.blog_main .mainbar {
+  width: 100%;
+  position: relative;
+}
+.blog_main .mainbar > div {
+  width: 100%;
+  background-color: #fff;
+  border-bottom: dotted 1px #ddd;
+  padding: 20px 40px;
+}
+.blog_main .mainbar > div h3 {
+  color: #111;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+}
+.blog_main .mainbar > div > p {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.blog_main .mainbar > div > p span:nth-of-type(2n) {
+  display: inline-block;
+  padding-right: 10px;
+}
+.blog_main .mainbar > div > p span:nth-of-type(2n-1) {
+  display: inline-block;
+  padding-right: 3px;
+}
+.blog_main .mainbar > div > div div:first-of-type {
+  position: absolute;
+  display: inline-block;
+  width: 100px;
+  height: 88px;
+  background: url('../images/test.jpeg') no-repeat center bottom;
+  background-clip: content-box;
+  background-origin: content-box;
+  background-size: cover;
+}
+.blog_main .mainbar > div > div div:last-of-type {
+  display: inline-block;
+  width: 100%;
+  height: 88px;
+  padding-left: 120px;
+  overflow: hidden;
+}
+.blog_main .mainbar > div > div div:last-of-type > p {
+  color: #51565e;
+  line-height: 1.7em;
+  letter-spacing: 0.1em;
+  max-height: 45px;
+  overflow: hidden;
+}
+.blog_main .mainbar > div > div div:last-of-type .btn {
+  width: 100%;
+  background-color: #17a2b8;
+  color: #fff;
+  padding: 5px;
+  text-align: center;
+}
+.blog_main .mainbar > div > div div:last-of-type .btn:hover {
+  background-color: #fd5c63;
+  border-color: #fd5c63;
+}
+.blog_main .mainbar > nav {
+  background-color: #fff;
+  padding: 0 40px;
+}
+.blog_main .mainbar > nav .pagination {
+  width: 100%;
+  font-size: 0;
+}
+.blog_main .mainbar > nav .pagination li {
+  display: inline-block;
+  width: 20%;
+}
+.blog_main .mainbar > nav .pagination li a {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  text-align: center;
+  background-color: #fd5c63;
+  color: #fff;
+  border: none;
+}
+.blog_main .mainbar > nav .pagination li a:hover {
+  background-color: #17a2b8;
+}
+.blog_main .mainbar > nav .pagination li:nth-of-type(2n) a {
+  border-left: solid 1px #ddd;
+  border-right: solid 1px #ddd;
+}
+.blog_main .mainbar > nav .pagination li:nth-of-type(2) a {
+  border-left: solid 1px #ddd;
+}
+.blog_main .mainbar > nav .pagination .active a {
+  background-color: #17a2b8;
+  cursor: pointer;
+  border-color: transparent;
+}
+.blog_main .sidebar {
+  position: absolute;
+  width: 270px;
+  top: 40px;
+  right: 0;
+}
+.blog_main .sidebar form {
+  padding: 40px;
+  margin-bottom: 40px;
+  background-color: #fff;
+}
+.blog_main .sidebar form .form-control {
+  padding: 15px 12px;
+}
+.blog_main .sidebar form .btn {
+  background-color: #17a2b8;
+  margin-top: 10px;
+  width: 100%;
+  color: #fff;
+}
+.blog_main .sidebar .hot {
+  padding: 40px;
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+.blog_main .sidebar .hot h3 {
+  color: #111;
+  font-size: 16px;
+  position: relative;
+  padding-bottom: 20px;
+}
+.blog_main .sidebar .hot h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #17a2b8;
+}
+.blog_main .sidebar .hot h3::after {
+  content: "";
+  position: absolute;
+  left: 40px;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #fd5c63;
+}
+.blog_main .sidebar .hot ul {
+  width: 100%;
+}
+.blog_main .sidebar .hot ul li {
+  width: 100%;
+  border-bottom: dotted 1px #ddd;
+}
+.blog_main .sidebar .hot ul li:last-of-type {
+  border-bottom: none;
+}
+.blog_main .sidebar .hot ul li a {
+  display: block;
+  width: 100%;
+  padding: 6px 0;
+  color: #51565e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+.blog_main .sidebar .new {
+  padding: 40px;
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+.blog_main .sidebar .new h3 {
+  color: #111;
+  font-size: 16px;
+  position: relative;
+  padding-bottom: 20px;
+}
+.blog_main .sidebar .new h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #17a2b8;
+}
+.blog_main .sidebar .new h3::after {
+  content: "";
+  position: absolute;
+  left: 40px;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #fd5c63;
+}
+.blog_main .sidebar .new ul {
+  width: 100%;
+}
+.blog_main .sidebar .new ul li {
+  width: 100%;
+  border-bottom: dotted 1px #ddd;
+}
+.blog_main .sidebar .new ul li:last-of-type {
+  border-bottom: none;
+}
+.blog_main .sidebar .new ul li a {
+  display: block;
+  width: 100%;
+  padding: 6px 0;
+  color: #51565e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+.blog_footer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #fff;
+  color: #51565e;
+  font-size: 18px;
+  text-align: center;
+}

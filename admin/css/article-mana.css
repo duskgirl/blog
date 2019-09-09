@@ -1,0 +1,69 @@
+.container-fluid {
+  padding-right: 0;
+  padding-left: 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+.container-fluid .blog_admin_main {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.container-fluid .blog_admin_main .blog_admin_center {
+  padding: 40px 0 0 220px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.container-fluid .blog_admin_main .blog_admin_center > ol > li > a {
+  color: #333;
+}
+.container-fluid .blog_admin_main .blog_admin_center > ol > li.active > a {
+  color: #17a2b8;
+}
+.container-fluid .blog_admin_main .blog_admin_center > .btn {
+  display: block;
+  width: 100%;
+  background-color: #17a2b8;
+  color: #fff;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table {
+  width: 100%;
+  margin-top: 20px;
+  table-layout: fixed;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table tr {
+  width: 100%;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table tr.nofound td {
+  color: #fd5c63;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table td {
+  width: 20%;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table thead th {
+  text-align: center;
+  vertical-align: middle;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table tbody td {
+  text-align: center;
+  vertical-align: middle;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table tbody td a {
+  width: 100%;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table tbody td.header a {
+  display: block;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.container-fluid .blog_admin_main .blog_admin_center > table tbody a button {
+  background-color: #17a2b8;
+  color: #fff;
+}

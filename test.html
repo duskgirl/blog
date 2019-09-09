@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <ul>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+    </ul>
+    <p>
+      <span>借记卡思考的会计师</span> 段时间看会计师考试开始会计师
+    </p>
+  </div>
+  <script src="./lib/jquery/jquery.min.js"></script>
+  <script>
+    $(function() {
+      $("ul").closest("div").find("p").css(
+        "border", "solid 5px red");
+      $("ul").closest("div").find("p").text("red");
+    })
+  </script>
+</body>
+
+</html>

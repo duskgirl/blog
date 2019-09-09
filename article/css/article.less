@@ -1,0 +1,121 @@
+@import '../../css/common';
+@import '../../css/var';
+@media (min-width:320px) and (max-width:768px) {
+  .blog_main {
+    padding-top:60px;
+    .mainbar {
+      padding-right:0;
+    }
+  }
+}
+@media (min-width:768px){
+  .blog_main {
+    padding-top:120px;
+    .mainbar {
+      padding-right:300px;
+    }
+  }
+}
+body {
+  background-color:#edeff2;
+}
+  .blog_main {
+    position:relative;
+    padding-left:0;
+    .mainbar {
+      width:100%;
+      position:relative;
+      min-height:750px;
+      &>.content{
+        width:100%;
+        background-color:#fff;
+        padding:20px 40px 5px;
+        h3 {
+          color: #111;
+          width:100%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 18px;
+          letter-spacing:0.1em;
+        }
+        &>.time_author{
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          color:#666;
+          font-size: 12px;
+          padding:5px 0 10px;
+          span:nth-of-type(2n) {
+            display: inline-block;
+            padding-right: 10px;
+          }
+          span:nth-of-type(2n-1){
+            display: inline-block;
+            padding-right: 3px;
+          }
+        }
+        &>img {
+          width:100%;
+          margin:0.5em 0;
+        }
+        &>.text {
+          color:#51565e;
+          word-break: break-all;
+          line-height:1.6em;
+          font-size: 14px;
+          letter-spacing: 0.1em;
+          text-indent: 2em;
+          margin:1em 0;
+        }
+      }
+      &>.point{
+        background-color:#fff;
+        padding:0 40px;
+        width:100%;
+        overflow: hidden;
+        &>.arrow_left,&>.arrow_right {
+          color:@mainColor;
+          width:48%;
+          position: relative;
+          padding-bottom: 40px;
+          &:hover{
+            color:@helpColor;
+          }
+        }
+        .arrow {
+          position:absolute;
+          top:5%;
+        }
+        .text {
+          display: inline-block;
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        &>.arrow_left {
+          float: left;
+          &>.text {
+            padding-left:20px;
+          }
+          &>.arrow {
+            left:0;
+          }
+        }
+        &>.arrow_right {
+          float: right;
+          &>.text {
+            padding-right:20px;
+            text-align:right;
+          }
+          &>.arrow {
+            right:0;
+          }
+        }
+      }
+    }
+  }
+  .sidebar {
+    top:120px;
+  }
