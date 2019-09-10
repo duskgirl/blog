@@ -1,6 +1,7 @@
 <?php
 // 载入配置文件
 require_once './config.php';
+require_once './functions.php';
 date_default_timezone_set('PRC');
 // 渲染页面
 
@@ -64,22 +65,19 @@ function resetPassword(){
     $GLOBALS['message'] = "两次输入的密码不一致，请重新输入";
     return;
   }
+  
   $email = $_POST['email'];
   $password = md5($_POST['password']);
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect){
-    exit('数据库连接失败!');
+  // 新密码不能和旧密码一致,先查询
+  $sql = "select password from adminuser where email = '{$email}' limit 1";
+  $row = blog_select_one($sql);
+  if($row['password'] === $password) {
+    $GLOBALS['message'] = "新密码不能和旧密码保持一致";
+    return;
   }
-  mysqli_set_charset($connect,'utf8');
-  // var_dump($email);
+  // 新密码和旧密码不一致了，才更改数据库
   $reset_password_sql = "update adminuser set password = '{$password}' where email = '{$email}' limit 1";
-  // var_dump($reset_password_sql);
-  $reset_password_query = mysqli_query($connect,$reset_password_sql);
-  // var_dump($reset_password_query);
-  if(!$reset_password_query){
-    exit('查询数据失败');
-  }
-  if(mysqli_affected_rows($connect)<1){
+  if(!blog_update($reset_password_sql)){
     $GLOBALS['message'] = '重置密码失败,请稍后重试';
     return;
   }

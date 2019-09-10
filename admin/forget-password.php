@@ -1,11 +1,7 @@
 <?php
 // 载入配置文件
 require_once './config.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-require_once './lib/PHPMailer-master/Exception.php';
-require_once './lib/PHPMailer-master/PHPMailer.php';
-require_once './lib/PHPMailer-master/SMTP.php';
+require_once './functions.php';
 // 校验邮箱唯一性
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   resetPassword();
@@ -66,43 +62,6 @@ function resetPassword(){
     $GLOBALS['message'] = $result;
   }
 }
-function sendmail($email,$header,$content){
-  $mail = new PHPMailer(true);
-  try {
-  //Server settings:服务器配置
-  $mail->CharSet = 'UTF-8';
-  $mail->SMTPDebug = 2;                                       // Enable verbose debug output
-  $mail->isSMTP();                                            // Set mailer to use SMTP
-  $mail->Host       = 'smtp.126.com';  // Specify main and backup SMTP servers
-  $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-  $mail->Username   = 'duskgirl@126.com';                     // SMTP username
-  $mail->Password   = 'dusk1993';                               // SMTP password
-  $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-  $mail->Port       = 465;                                    // TCP port to connect to
-  
-  $mail->setFrom('duskgirl@126.com', '大思考');
-  $mail->addAddress($email, $email);     // Add a recipient
-
-  $mail->addReplyTo('duskgirl@126.com', '大思考');
-  
-  $mail->isHTML(true);                                  // Set email format to HTML
-  // 这里是邮件标题
-  $mail->Subject = $header;
-  // 这里是邮件内容
-  $mail->Body    = $content;
-  // 如果邮件客户端不支持HTML则显示此内容
-  $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-  $mail->send();
-  // 邮件发送成功,我自行设置返回1，表示成功
-  // return 'Message has been sent';
-  return 1;
-  } catch (Exception $e) {
-  // 邮件发送失败
-    // return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    return "发送邮件失败: {$mail->ErrorInfo}";
-  }
-}  
 ?>
 
   <!DOCTYPE html>
@@ -190,14 +149,17 @@ function sendmail($email,$header,$content){
                 // ajax验证数据的唯一性,服务端返回值,true代表不重复，false代表重复 
                 // server result:{"valid",true or false}
                 // url:验证地址
-                url: '/blog/admin/checkEmail.php',
+                url: '/blog/admin/checkUnique.php',
                 // 提示消息
                 message: '该邮箱尚未注册',
-                type: 'GET',
+                type: 'POST',
                 // 自定义提交数据，默认值提交当前input value
-                data: function(){
-                  return {
-                    email: $.trim($('.register').find('.form-email').val())
+                data: {
+                  email: function(){
+                    return $.trim($('.register').find('.form-email').val())
+                  },
+                  unique: function(){
+                    return false
                   }
                 }
               }

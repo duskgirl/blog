@@ -38,6 +38,7 @@ function register () {
   $email = $_POST['email'];
   $username = $_POST['username'];
   $password = md5($_POST['password']);
+  
   // 当客户端提交过来的完整的表单信息就应该开始对其进行数据校验
   // 连接数据库
   $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -55,9 +56,13 @@ function register () {
     return;
   }
 
+
+
+  // 注册的验证是最好将修改时间/用户状态都加上
   // 读取用户信息，将用户信息进行md5加密生成一个特别的字符串作为找回密码的验证码，然后构造URL;
   // 组合验证码，token:验证码
-  $token = md5($email.$username.$password);
+  $userstats = 0;
+  $token = md5($email.$username.$password.$userstats);
   // 构造URL让用户激活账户
   // 除了这个时候可以发送链接到用户邮箱，登录的时候也可以发送类似的链接到邮箱
   $url = "http://127.0.0.1:3000/blog/admin/activeacount.php?email={$email}&token={$token}";    
@@ -250,7 +255,7 @@ function register () {
                 message: '当前邮箱已存在，请直接去<a href="/blog/admin/login.php">登录</a>吧',
                 // 每输入一个字符，就发ajax请求，服务器压力太大，所以时间设置长点
                 delay: 2000,
-                type: 'GET',
+                type: 'POST',
                 // 自定义提交数据，默认值提交当前input value
                 data: function(){
                   return {
@@ -282,7 +287,7 @@ function register () {
                 // 提示消息
                 message: '当前用户名已被注册，请换个用户名试试吧',
                 delay: 2000,
-                type: 'GET',
+                type: 'POST',
                 data: function(){
                   return {
                     username: $.trim($('.register').find('.form-username').val())

@@ -1,10 +1,11 @@
 <?php
 // 载入配置文件
 require_once './config.php';
-session_start();
+require_once './functions.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   login();
 }
+// 增加一个功能要是用户激活了才能登陆，否则不能登陆
 function login () {
   // 1. 接收并校验
   // 2. 持久化
@@ -27,7 +28,7 @@ function login () {
     exit('连接数据库失败');
   }
   // 查询数据库
-  $query = mysqli_query($conn, "select id,name,password from adminuser where name = '{$username}' limit 1");
+  $query = mysqli_query($conn, "select id,email,name,password,userstats from adminuser where name = '{$username}' limit 1");
   if (!$query) {
     $GLOBALS['message'] = '登录失败，请重试！';
     return;
@@ -36,9 +37,46 @@ function login () {
   $user = mysqli_fetch_assoc($query);
   if (!$user) {
     // 用户不存在
-    $GLOBALS['message'] = '当前用户不存在';
+    $GLOBALS['message'] = '当前用户尚未注册';
     return;
   }
+
+  // 检测用户是否激活账户
+  // 未激活就只有直接发送链接到页面去
+  // 只要发送邮件都要更新时间，因为保证链接的有效期
+  if($user['userstats'] != 1) {
+    // 修改时间
+    $modified_time_sql = "update adminuser set modified_time=current_timestamp where name='{$username}'";
+    $result = blog_update($modified_time_sql);
+    // 更改时间失败
+    if(!$result){
+      exit('更新数据失败');
+    }
+    // 组合验证码，token:验证码(要包含用户状态)
+    $email = $user['email'];
+    $username = $user['name'];
+    $password = $user['password'];
+    $userstats = $user['userstats'];
+    $token = md5($email.$username.$password.$userstats);
+    // 构造URL让用户激活账户
+    // 除了这个时候可以发送链接到用户邮箱，登录的时候也可以发送类似的链接到邮箱
+    $url = "http://127.0.0.1:3000/blog/admin/activeacount.php?email={$email}&token={$token}";   
+     // 收件人，标题，邮件内容
+    $header = '大思考账户激活';
+    $content = "您好，感谢您在大思考注册账户！<br /> 请点击下方链接进行激活账户:<br /><a href='{$url}'>{$url}<a><br />大思考";
+    $result = sendmail($email,$header,$content);
+    if($result == 1) {
+      // 传递参数:表示该用户尚未激活
+      // 数据库为1是表示已经激活，这里传递1只是为了方便服务端好接收数据，这里是表示未激活的
+      header('Location:/blog/admin/sendmail-success.php?userstats=1');
+      // $msg = '系统已向您的邮箱发送了一封邮件<br/>请登录到您的邮箱及时重置您的密码！';
+    } else {
+      $GLOBALS['message'] = $result;
+    }
+    $GLOBALS['message'] = '当前用户尚未激活,系统已重新将激活账户链接发送到您的邮箱,请及时登录您的邮箱激活账户!';
+    return;
+  }
+
   // 一般密码是加密存储的
   if ($user['password'] !== md5($password)) {
     // 密码不正确
@@ -129,7 +167,9 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['acti
   <script src="./lib/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
   <script>
     // 初步检验表单内容
-    // 登录页面忘记密码怎么弄
+    // 登录页面忘记密码
+    // 1.初步检测用户名是否存在
+    // 2.初步检测输入密码是否和当前用户匹配
     $(function(){
       $('.login').bootstrapValidator({
         message: 'This value is not valid',
@@ -140,7 +180,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['acti
           },
           fields: {
             username: {
-            // verbose:false,
+            verbose:false,
             threshold: 2,
             message: '用户名验证失败',
             validators: {
@@ -155,10 +195,28 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['acti
               regxp: {
                 regexp: /^[a-zA-Z0-9_]+$/,
                 message: '用户名只能包含大写，小写，数字和下划线'
+              },
+              remote: {
+                // 检测当前用户是否注册
+                url: '/blog/admin/checkUnique.php',
+                // 提示消息
+                message: '当前用户尚未注册',
+                delay: 2000,
+                type: 'POST',
+                data: {
+                  // 这个数据是默认会传递的
+                  // username: function(){
+                  //   return $.trim($('.login').find('.form-username').val())
+                  // },
+                  unique: function(){
+                    return false
+                  }
+                }
               }
             }
           },
           password: {
+            verbose:false,
             message: '密码验证失败',
             threshold: 2,
             validators: {
@@ -173,6 +231,19 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['acti
               regxp: {
                 regexp: /^[a-zA-Z0-9_]+$/,
                 message: '密码只能包含大写，小写，数字和下划线'
+              },
+              remote: {
+                // 检测当前用户是否注册
+                url: '/blog/admin/checkUnique.php',
+                // 提示消息
+                message: '输入密码与当前用户不匹配，请重新输入',
+                delay: 2000,
+                type: 'POST',
+                data: {
+                  username: function(){
+                    return $.trim($('.login').find('.form-username').val())
+                  }
+                }
               }
             }
           }

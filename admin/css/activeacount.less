@@ -1,0 +1,46 @@
+@import 'var';
+@import 'common';
+.blog_admin_activeacount {
+  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url(../images/register_bg.jpg) no-repeat;
+  background-position: center center;
+  background-clip: content-box;
+  background-origin: content-box;
+  .cover{
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    opacity: 0.8;
+  }
+  .container {
+    width: 300px;
+    height:350px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background:#fff;
+    p {
+      text-align: center;
+      &.problem_text {
+        text-align: center;
+        margin-top:20px;
+        letter-spacing: 0.1em;
+      }
+      &.bggreen{
+        color:#32cd26;
+        font-size:120px;
+      }
+    }
+    .success {
+      text-align:center;
+      a{
+        color: #3c763d;
+      }
+    }
+    
+  }
+}
