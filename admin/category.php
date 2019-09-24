@@ -1,4 +1,5 @@
 <?php
+// 设置浏览者只能是浏览用户
 require_once './config.php';
 require_once './functions.php';
 blog_get_current_user();
@@ -6,55 +7,44 @@ blog_get_current_user();
 if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['name'])) {
   addCategory();
 }
+// 添加分类
 function addCategory(){
-  if(empty($_GET['name'])){
-    exit('请传入必要的参数');
+  if(is_admin()){
+    if(empty($_GET['name'])){
+      exit('请传入必要的参数');
+    }
+    $name = $_GET['name'];
+    $sql = "insert into category (name) values ('{$name}')";
+    $result = blog_update($sql);
+    if(!$result){
+      $GLOBALS['err_message'] = '添加分类失败';
+    };
+    $GLOBALS['success_message'] = '添加分类成功';
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
   }
-  $name = $_GET['name'];
-  // 连接数据库
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect) {
-    exit('数据库连接失败');
-  }
-  mysqli_set_charset($connect,'utf8');
-  $sql = "insert into category (name) values ('{$name}')";
-  $query = mysqli_query($connect,$sql);
-  if(!$query){
-    exit('添加分类失败');
-  }
-  if(mysqli_affected_rows($connect)<=0){
-    $GLOBALS['err_message'] = '添加分类失败';
-  };
-  $GLOBALS['success_message'] = '添加分类成功';
-  header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
 // 执行文章删除分类操作
 if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   deleteCategory();
 }
 function deleteCategory(){
-  if(empty($_GET['id'])){
-    exit('请传入必要的参数');
+  if(is_admin()){
+    if(empty($_GET['id'])){
+      exit('请传入必要的参数');
+    }
+    $id = $_GET['id'];
+    // 连接数据库
+    $connect = blog_connect();
+    mysqli_query($connect,"SET foreign_key_checks = 0");
+    $sql = "delete from category where id = {$id}";
+    $result = blog_update($sql);
+    if(!$result){
+      $GLOBALS['delete_err_message'] = '删除分类失败';
+    };
+    $GLOBALS['delete_success_message'] = '删除分类成功';
+    mysqli_query($connect,"SET foreign_key_checks = 1");
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
   }
-  $id = $_GET['id'];
-  // 连接数据库
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect) {
-    exit('数据库连接失败');
-  }
-  mysqli_set_charset($connect,'utf8');
-  mysqli_query($connect,"SET foreign_key_checks = 0");
-  $sql = "delete from category where id = {$id}";
-  $query = mysqli_query($connect,$sql);
-  if(!$query){
-    exit('删除分类失败');
-  }
-  if(mysqli_affected_rows($connect)<=0){
-    $GLOBALS['delete_err_message'] = '删除分类失败';
-  };
-  $GLOBALS['delete_success_message'] = '删除分类成功';
-  mysqli_query($connect,"SET foreign_key_checks = 1");
-  header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
 
 // 执行文章页面渲染操作
@@ -76,24 +66,15 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     $search_value = $search_result;
   }
-  require_once './getcategorypage.php';
   getCategory();
 }
+// 分类页面和管理员管理页面都不做分页
 function getCategory(){
-  global $skip,$per_list,$search_value;  
-  // 连接数据库
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect) {
-    exit('数据库连接失败');
-  }
-  mysqli_set_charset($connect,'utf8');
-  $sql = "select id,name from category where name like '%{$search_value}%' order by id desc limit {$skip},{$per_list}";
-  $query = mysqli_query($connect,$sql);
-  if(!$query){
-    exit('查询分类失败');
-  }
-  while($row=mysqli_fetch_array($query)){
-    $GLOBALS['getCategory'][] = $row;
+  global $search_value;  
+  $sql = "select id,name from category where name like '%{$search_value}%' order by id desc";
+  $result = blog_select_all($sql);
+  if(!$result) {
+    $GLOBALS['err_message'] = '查询数据失败';
   }
 }
 ?>
@@ -109,7 +90,6 @@ function getCategory(){
   <link rel="stylesheet" href="./css/topbar.css">
   <link rel="stylesheet" href="./css/sidebar.css">
   <link rel="stylesheet" href="./css/category.css">
-  <link rel="stylesheet" href="./css/pagination.css">
 </head>
 
 <body>
@@ -162,13 +142,8 @@ function getCategory(){
                 <th>操作</th>
               </tr>
               <tbody>
-                <?php if($total === 0): ?>
-                  <tr class="nofound">
-                    <td colspan="2">抱歉！没有找到相关分类!</td>
-                  </tr>
-                <?php endif ?>
-                <?php if(isset($getCategory)):?>
-                <?php foreach($getCategory as $key => $item):?>
+                <?php if(isset($array)):?>
+                <?php foreach($array as $key => $item):?>
                 <tr>
                   <td><?php echo $item['name']?></td>
                   <td><a href="?id=<?php echo $item['id']?>" class="btn">删除</a>
@@ -179,7 +154,6 @@ function getCategory(){
               </tbody>
             </thead>
           </table>
-          <?php include './pagination.php'?>
         </section>
     </div>
   </div>

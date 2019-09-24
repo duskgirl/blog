@@ -44,7 +44,7 @@ img {
 }
 @media (min-width: 768px) {
   .blog_main {
-    padding-top: 120px;
+    padding-top: 90px;
   }
   .blog_main .mainbar {
     padding-right: 300px;
@@ -53,21 +53,25 @@ img {
 body {
   background-color: #edeff2;
 }
-.blog_main {
+body .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+body .blog_main {
   position: relative;
   padding-left: 0;
 }
-.blog_main .mainbar {
+body .blog_main .mainbar {
   width: 100%;
   position: relative;
   min-height: 750px;
 }
-.blog_main .mainbar > .content {
+body .blog_main .mainbar > .content {
   width: 100%;
   background-color: #fff;
   padding: 20px 40px 5px;
 }
-.blog_main .mainbar > .content h3 {
+body .blog_main .mainbar > .content h3 {
   color: #111;
   width: 100%;
   overflow: hidden;
@@ -76,7 +80,7 @@ body {
   font-size: 18px;
   letter-spacing: 0.1em;
 }
-.blog_main .mainbar > .content > .time_author {
+body .blog_main .mainbar > .content > .time_author {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -84,19 +88,19 @@ body {
   font-size: 12px;
   padding: 5px 0 10px;
 }
-.blog_main .mainbar > .content > .time_author span:nth-of-type(2n) {
+body .blog_main .mainbar > .content > .time_author span:nth-of-type(2n) {
   display: inline-block;
   padding-right: 10px;
 }
-.blog_main .mainbar > .content > .time_author span:nth-of-type(2n-1) {
+body .blog_main .mainbar > .content > .time_author span:nth-of-type(2n-1) {
   display: inline-block;
   padding-right: 3px;
 }
-.blog_main .mainbar > .content > img {
+body .blog_main .mainbar > .content > img {
   width: 100%;
   margin: 0.5em 0;
 }
-.blog_main .mainbar > .content > .text {
+body .blog_main .mainbar > .content > .text {
   color: #51565e;
   word-break: break-all;
   line-height: 1.6em;
@@ -105,53 +109,53 @@ body {
   text-indent: 2em;
   margin: 1em 0;
 }
-.blog_main .mainbar > .point {
+body .blog_main .mainbar > .point {
   background-color: #fff;
   padding: 0 40px;
   width: 100%;
   overflow: hidden;
 }
-.blog_main .mainbar > .point > .arrow_left,
-.blog_main .mainbar > .point > .arrow_right {
+body .blog_main .mainbar > .point > .arrow_left,
+body .blog_main .mainbar > .point > .arrow_right {
   color: #17a2b8;
   width: 48%;
   position: relative;
   padding-bottom: 40px;
 }
-.blog_main .mainbar > .point > .arrow_left:hover,
-.blog_main .mainbar > .point > .arrow_right:hover {
+body .blog_main .mainbar > .point > .arrow_left:hover,
+body .blog_main .mainbar > .point > .arrow_right:hover {
   color: #fd5c63;
 }
-.blog_main .mainbar > .point .arrow {
+body .blog_main .mainbar > .point .arrow {
   position: absolute;
   top: 5%;
 }
-.blog_main .mainbar > .point .text {
+body .blog_main .mainbar > .point .text {
   display: inline-block;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.blog_main .mainbar > .point > .arrow_left {
+body .blog_main .mainbar > .point > .arrow_left {
   float: left;
 }
-.blog_main .mainbar > .point > .arrow_left > .text {
+body .blog_main .mainbar > .point > .arrow_left > .text {
   padding-left: 20px;
 }
-.blog_main .mainbar > .point > .arrow_left > .arrow {
+body .blog_main .mainbar > .point > .arrow_left > .arrow {
   left: 0;
 }
-.blog_main .mainbar > .point > .arrow_right {
+body .blog_main .mainbar > .point > .arrow_right {
   float: right;
 }
-.blog_main .mainbar > .point > .arrow_right > .text {
+body .blog_main .mainbar > .point > .arrow_right > .text {
   padding-right: 20px;
   text-align: right;
 }
-.blog_main .mainbar > .point > .arrow_right > .arrow {
+body .blog_main .mainbar > .point > .arrow_right > .arrow {
   right: 0;
 }
-.sidebar {
-  top: 120px;
+body .sidebar {
+  top: 90px;
 }

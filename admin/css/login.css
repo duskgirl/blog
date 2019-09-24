@@ -83,20 +83,3 @@ img {
   background-color: #17a2b8;
   font-size: 16px;
 }
-.blog_admin_login .container .content .skip_register {
-  display: inline-block;
-  margin-top: 20px;
-  color: #fff;
-  text-align: center;
-}
-.blog_admin_login .container .content .skip_register a {
-  color: #17a2b8;
-}
-.blog_admin_login .container .content .forget_password {
-  display: inline-block;
-  text-align: center;
-  margin-top: 20px;
-}
-.blog_admin_login .container .content .forget_password a {
-  color: #999;
-}

@@ -82,6 +82,7 @@ function getviewnumber(){
   <link rel="stylesheet" href="../css/sidebar.css">
   <link rel="stylesheet" href="../css/footer.css">
   <link rel="stylesheet" href="./css/article.css">
+  <link rel="stylesheet" href="./css/comment.css">
 </head>
 
 <body>
@@ -93,8 +94,8 @@ function getviewnumber(){
   <main class="blog_main container">
     <section class="mainbar">
       <div class="content">
-    <h3><?php echo $current_row['header']?></h3>
-    <p class="time_author">
+        <h3><?php echo $current_row['header']?></h3>
+        <p class="time_author">
           <span class="fa fa-calendar-check-o"></span><span> <?php echo $current_row['pubtime']?> </span>
           <span class="fa fa-user-o"></span><span> <?php echo $current_row['author']?> </span>
           <span class="fa fa-folder-open-o"></span><span> <?php echo $current_row['name']?> </span>
@@ -105,11 +106,10 @@ function getviewnumber(){
         <img src="./images/banner_1.jpg" alt="">
         <p class="text">天生的美女，从小到大就长得漂亮，几乎是在别人的称赞中长大的。尤其是在大了的时候，身边的追求者更是一个接着一个，只不过很可惜，你暂时并不会考虑感情上的问题。美人美在骨，你就是这种类型，所以你的美并不会随着时间的流逝而消散。相反，年纪越大，你的美就变得更加有韵味。</p>
         <p class="text">天生的美女，从小到大就长得漂亮，几乎是在别人的称赞中长大的。尤其是在大了的时候，身边的追求者更是一个接着一个，只不过很可惜，你暂时并不会考虑感情上的问题。美人美在骨，你就是这种类型，所以你的美并不会随着时间的流逝而消散。相反，年纪越大，你的美就变得更加有韵味。</p>
-
         <img src="./images/banner_2.jpg" alt="">
         <p class="text">In vehicula urna in ex malesuada malesuada. Curabitur ut tellus vehicula turpis semper consequat. Phasellus tristique odio enim, et molestie risus volutpat a. Phasellus ex enim, varius sit amet eleifend laoreet, efficitur ac lorem. Donec nibh
-          elit, varius sed vulputate vitae, auctor rutrum lacus.</p>
-  
+          elit, varius sed vulputate vitae, auctor rutrum lacus.
+        </p>
       </div>
       <div class="point">
         <?php if(isset($prev_row)):?>
@@ -135,6 +135,7 @@ function getviewnumber(){
         </a>
         <?php endif?>
       </div>
+      <?php include './comment.php'?>
     </section>
     <?php include '../sidebar.php'?>
   </main>

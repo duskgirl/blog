@@ -35,6 +35,16 @@ button {
 img {
   border: 0 none;
 }
+.ellipsis a {
+  display: block;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ellipsis a:hover {
+  color: #17a2b8;
+}
 .container-fluid {
   padding-right: 0;
   padding-left: 0;
@@ -73,7 +83,7 @@ img {
   width: 100%;
   color: #fff;
   text-align: center;
-  font-size: 20px;
+  font-size: 14px;
   height: 36px;
   line-height: 36px;
 }

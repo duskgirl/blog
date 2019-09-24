@@ -26,10 +26,8 @@
       <li class="active"><a href="/blog/admin/index.php">首页</a></li>
       <li><a href="/blog/admin/category.php">分类管理</a></li>
       <li><a href="/blog/admin/article.mana.php">文章管理</a></li>
-      <li><a href="#">管理员管理</a></li>
-      <li><a href="#">用户管理</a></li>
-      <li><a href="#">评论管理</a></li>
-      <li><a href="#">标签管理</a></li>
-      <li><a href="#">友情链接管理</a></li>
+      <li><a href="/blog/admin/administrator.php">管理员管理</a></li>
+      <li><a href="/blog/admin/user.php">用户管理</a></li>
+      <li><a href="/blog/admin/comment.php">评论管理</a></li>
     </ul>
   </aside>

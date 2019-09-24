@@ -4,54 +4,175 @@ body {
   background-color:#edeff2;
 }
   .blog_topbar {
-    .container {
-      padding-left:40px;
-      padding-right:40px;
-    }
-    .navbar {
+    .navbar-default {
       background-color: #fff;
       border:none;
-    }
-    .navbar-default {
-      .navbar-brand {
-        color: @mainColor;
-        letter-spacing: 0.3em;
-        padding:30px 40px;
-        font-size:25px;
-        font-weight: 600;
-        text-shadow: 0 0 2px #fff,
-        0 -2px 4px #ff3,
-        1px -5px 6px #fd3,
-        -1px -8px 8px #f80,
-        2px -13px 12px @helpColor;
-      }
-      .navbar-nav{
-        .active {
-          a {
-            background-color: transparent;
+      padding:0;
+      .container {
+        position: relative;
+        height:50px;
+        // 导航
+        .blog_nav {
+          position: absolute;
+          left:40px;
+          top:0;
+          width:30px;
+          height:100%;
+          .nav_toggle {
+            display: inline-block;
+            width:100%;
+            height:100%;
+            font-size:30px;
             color:@mainColor;
+            text-shadow: 0 0 2px #999;
+            span {
+              display: inline-block;
+              padding-top:10px;
+            }
+          }
+          .blog_nav_content {
+            position: fixed;
+            top:0;
+            left:-200px;
+            width:200px;
+            height:100%;
+            background-color: #fff;
+            .back {
+              background-color: #222;
+              margin:0;
+              .blog_nav_close {
+                color:#fff;
+                font-size: 25px;
+                span {
+                  position: absolute;
+                  top:0;
+                  right:0;
+                  margin-top:-2px;
+                }
+              }
+            }
+            h3 {
+              padding:150px 0 40px 0;
+              text-align:center;
+              color: #f9f9f9;
+              background-color: #222;
+              margin:0;
+              letter-spacing: 0.1em;
+            }
+            li {
+              padding:10px 0;
+              a {
+                display: block;
+                width:100%;
+                color:#222;
+                text-align:center;
+                &:hover {
+                  color: @mainColor;
+                }
+              }
+            }
+
           }
         }
-        &>li>a {
-          font-size: 16px;
-          color:#111;
-          font-weight: 600;
-          padding-top:30px;
-          padding-bottom:30px;
-          &:hover {
-            background-color:#fff;
-            color:@mainColor;
+
+        // .navbar-brand {
+        //   margin-left:30px;
+        //   color: @mainColor;
+        //   letter-spacing: 0.3em;
+        //   font-size:25px;
+        //   font-weight: 600;
+        //   text-shadow: 0 0 3px #999;
+        //   vertical-align: middle;
+        // }
+        .person_center {
+          position: absolute;
+          right:40px;
+          top:0;
+          height:100%;
+          // 未登录
+          .no_login {
+            a {
+              background-color:@mainColor;
+              color:#fff;
+              vertical-align: middle;
+            }
           }
-      }
-      }
-      .navbar-toggle{
-        margin-top:20px;
-        margin-right:40px;
-        border-color:@mainColor;
-        .icon-bar {
-          background-color:@mainColor;
+          // 登陆
+          .is_login {
+            position: relative;
+            width:40px;
+            height:40px;
+            margin-top:5px;
+            .menu_toggle {
+              vertical-align: middle;
+              display: inline-block;
+              width:100%;
+              height:100%;
+              text-align:right;
+              position: relative;
+              &::before {
+                content: "";
+                  position: absolute;
+                  right: 0;
+                  bottom: 0;
+                  width:10px;
+                  height:10px;
+                  // transform: translateY(-50%);
+                  background-color: @helpColor;
+                  border-radius:50%;
+              }
+              img {
+                width:100%;
+                height:100%;
+                border-radius: 50%;
+              }
+            }
+            .person_menu {
+              display:none;
+              position: absolute;
+              width:150px;
+              right:0;
+              padding:20px 0;
+              background:url('../images/person_menu.png') no-repeat;
+              background-size:150px 120px;
+              li {
+                padding:10px;
+                text-align:center;
+                border-bottom:dashed 1px #ddd;
+                &.is_message{
+                  a {
+                    position: relative;
+                    padding-right:10px;
+                    &::before{
+                      content: "";
+                      position: absolute;
+                      right: -4px;
+                      top:50%;
+                      width:10px;
+                      height:10px;
+                      transform: translateY(-50%);
+                      background-color: @helpColor;
+                      border-radius:50%;
+                    }
+                  }
+                }
+                &:last-of-type {
+                  border-bottom:none;
+                }
+                a {
+                  // display: inline-block;
+                  // width:100%;
+                  color:#111;
+                  &:hover {
+                    color:@mainColor;
+                  }
+                }
+              }
+            }
+          }
         }
-      } 
+      }
     }
   }
    
+

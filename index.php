@@ -54,6 +54,7 @@ function getIndex(){
   <link rel="stylesheet" href="./css/topbar.css">
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/sidebar.css">
   <link rel="stylesheet" href="./css/pagination.css">
 </head>
 

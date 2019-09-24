@@ -1,12 +1,6 @@
 <?php
 // 载入配置文件
 require_once './config.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-require_once './lib/PHPMailer-master/Exception.php';
-require_once './lib/PHPMailer-master/PHPMailer.php';
-require_once './lib/PHPMailer-master/SMTP.php';
-
 session_start();
 // 连接数据库
 function blog_connect(){
@@ -24,8 +18,8 @@ function blog_select_one($sql){
   if(!$query) {
     exit('数据查询失败');
   }
-  $row = mysqli_fetch_array($query);
-  return $row;
+  $GLOBALS['row'] = mysqli_fetch_array($query);
+  return isset($GLOBALS['row']) ? $GLOBALS['row'] : null;
 }
 // 数据查询所有操作
 function blog_select_all($sql){
@@ -37,9 +31,9 @@ function blog_select_all($sql){
   while($row = mysqli_fetch_array($query)){
     $GLOBALS['array'][] = $row;
   }
-  return $GLOBALS['array'];
+  return isset($GLOBALS['array']) ? $GLOBALS['array'] : null;
 }
-// 更新数据操作
+// 增删改数据操作
 function blog_update($sql){
   $connect = blog_connect();
   $query = mysqli_query($connect,$sql);
@@ -62,41 +56,13 @@ function blog_get_current_user(){
     return $_SESSION['current_login_user'];
   }
 }
-// 给用户发送邮箱
-function sendmail($email,$header,$content){
-  $mail = new PHPMailer(true);
-  try {
-  //Server settings:服务器配置
-  $mail->CharSet = 'UTF-8';
-  $mail->SMTPDebug = 2;                                       // Enable verbose debug output
-  $mail->isSMTP();                                            // Set mailer to use SMTP
-  $mail->Host       = 'smtp.126.com';  // Specify main and backup SMTP servers
-  $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-  $mail->Username   = 'duskgirl@126.com';                     // SMTP username
-  $mail->Password   = 'dusk1993';                               // SMTP password
-  $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-  $mail->Port       = 465;                                    // TCP port to connect to
-  
-  $mail->setFrom('duskgirl@126.com', '大思考');
-  $mail->addAddress($email, $email);     // Add a recipient
-
-  $mail->addReplyTo('duskgirl@126.com', '大思考');
-  
-  $mail->isHTML(true);                                  // Set email format to HTML
-  // 这里是邮件标题
-  $mail->Subject = $header;
-  // 这里是邮件内容
-  $mail->Body    = $content;
-  // 如果邮件客户端不支持HTML则显示此内容
-  $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-  $mail->send();
-  // 邮件发送成功,我自行设置返回1，表示成功
-  // return 'Message has been sent';
-  return 1;
-  } catch (Exception $e) {
-  // 邮件发送失败
-    // return "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    return "发送邮件失败: {$mail->ErrorInfo}";
+// 获取当前登陆用户是否是管理员权限
+function is_admin(){
+  blog_get_current_user();
+  if($_SESSION['current_login_user']['permission'] != 1) {
+    $GLOBALS['err_message'] = '当前用户权限不足！操作失败';
+    return false;
+  } else {
+    return true;
   }
 }

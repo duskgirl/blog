@@ -7,7 +7,7 @@ require_once 'lib/PHPMailer-master/Exception.php';
 require_once 'lib/PHPMailer-master/PHPMailer.php';
 require_once 'lib/PHPMailer-master/SMTP.php';
 
-session_start();
+// session_start();
 // 连接数据库
 function blog_connect(){
   $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
@@ -37,9 +37,9 @@ function blog_select_all($sql){
   while($row = mysqli_fetch_array($query)){
     $GLOBALS['array'][] = $row;
   }
-  return $GLOBALS['array'];
+  return empty($GLOBALS['array']) ?  null: $GLOBALS['array'];
 }
-// 更新数据操作
+// 增删改数据操作
 function blog_update($sql){
   $connect = blog_connect();
   $query = mysqli_query($connect,$sql);

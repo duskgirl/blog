@@ -1,0 +1,63 @@
+@import 'common';
+@import 'var';
+.person_nav {
+  position: absolute;
+  left:0;
+  width:200px;
+  height:100%;
+  background-color: #fff;
+  border-right:solid 1px #eaeaea;
+  .header{
+    text-align:center;
+    padding:40px 0;
+    .avatar{
+      width:100px;
+      height: 100px;
+      border-radius:50%;
+      border:solid 2px @helpColor;
+    }
+    h3 {
+      color: @mainColor;
+      position: relative;
+      padding-bottom: 10px;
+      &::before {
+        content: '';
+        position: absolute;
+        left:50%;
+        bottom:0;
+        transform:translateX(-100%);
+        width:40px;
+        height:2px;
+        background-color: @mainColor;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        left:50%;
+        bottom:0;
+        width:40px;
+        height:2px;
+        background-color: @helpColor;
+      }
+    }
+  }
+  
+  ul {
+    padding:30px 0;
+    border-top:solid 1px  #eaeaea;
+    li {
+      a {
+        display: block;
+        width:100%;
+        height:100%;
+        padding:10px 0;
+        text-align:center;
+        color: @fontColor;
+        &:hover {
+          background-color:#333;
+          color:#fff;
+        }
+      }
+    }
+  }
+}

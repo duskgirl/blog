@@ -1,6 +1,8 @@
 <?php
   // 这里不导入配置文件，因为每个页面都加载了配置文件
-  // require_once './config.php';
+  $root = $_SERVER['DOCUMENT_ROOT'];
+  $path = $root.'/blog/config.php';
+  require_once $path;
   // 连接数据库
   $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
   if(!$connect) {

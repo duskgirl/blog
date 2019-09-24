@@ -40,47 +40,28 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
 }
 function getArticleMana(){
   global $per_list,$skip,$search_value;
-  // 连接数据库
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect) {
-    exit('数据库连接失败');
-  }
-  mysqli_set_charset($connect,'utf8');
-
-  // var_dump($skip);
-  // var_dump($per_list);
   $sql = "select a.header,a.author,a.pubtime,a.id,a.content,a.category_id,c.id as categoryid,c.name as categoryname from article as a inner join category as c on a.category_id = c.id where a.header like '%{$search_value}%' order by a.id desc limit {$skip},{$per_list}";
-  $query = mysqli_query($connect,$sql);
-  if(!$query){
-    exit('查询数据失败');
+  $result = blog_select_all($sql);
+  if(!$result) {
+    $GLOBALS['err_message'] = '查询数据失败';
   }
-  while($row = mysqli_fetch_array($query)) {
-    $GLOBALS['articleMana'][] = $row;
-  } 
 }
 
 // 删除指定
 function deleteArticle(){
-  if(empty($_GET['id']) && empty($_GET['articleId'])){
-    exit('请传入必要参数');
+  if(is_admin()){
+    if(empty($_GET['id']) && empty($_GET['articleId'])){
+      exit('请传入必要参数');
+    }
+    $articleId = $_GET['articleId'];
+    $sql = "delete from article where id={$articleId}";
+    $result = blog_update($sql);
+    if(!$result){
+      $GLOBALS['err_message'] = '数据删除失败';
+    };
+    $GLOBALS['success_message'] = '数据删除成功';
+    header('Location:'.$_SERVER['HTTP_REFERER']);
   }
-  $articleId = $_GET['articleId'];
-  // 连接数据库
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect) {
-    exit('数据库连接失败');
-  }
-  mysqli_set_charset($connect,'utf8');
-  $sql = "delete from article where id={$articleId}";
-  $query = mysqli_query($connect,$sql);
-  if(!$query){
-    exit('删除数据失败');
-  }
-  if(mysqli_affected_rows($connect)<=0){
-    $GLOBALS['err_message'] = '数据删除失败';
-  };
-  $GLOBALS['success_message'] = '数据删除成功';
-  header('Location:'.$_SERVER['HTTP_REFERER']);
 }
 
 ?>
@@ -137,14 +118,14 @@ function deleteArticle(){
             <th>操作</th>
           </tr>
           <tbody>
-            <?php if(isset($articleMana)):?>
-            <?php foreach($articleMana as $key => $item): ?>
+            <?php if(isset($array)):?>
+            <?php foreach($array as $key => $item): ?>
             <tr>
               <td><?php echo $item['categoryname']?></td>
-              <td class="header"><a href="<?php echo $item['content']?>?id=<?php echo $item['id']?>"><?php echo $item['header']?></a></td>
+              <td class="ellipsis"><a href="<?php echo $item['content']?>?id=<?php echo $item['id']?>"><?php echo $item['header']?></a></td>
               <td><?php echo $item['author']?></td>
               <td><?php echo $item['pubtime']?></td>
-              <td><a href="/blog/admin/article.mana.php?id=<?php echo $item['categoryid']?>&articleId=<?php echo $item['id']?>"><button class="btn">删除</button></a>
+              <td><a class="btn" href="/blog/admin/article.mana.php?id=<?php echo $item['categoryid']?>&articleId=<?php echo $item['id']?>">删除</a>
              </td>
             </tr>
             <?php endforeach?>

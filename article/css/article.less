@@ -1,5 +1,7 @@
 @import '../../css/common';
 @import '../../css/var';
+
+// 该做如何保证文章页面的导航栏js其作用 
 @media (min-width:320px) and (max-width:768px) {
   .blog_main {
     padding-top:60px;
@@ -10,7 +12,7 @@
 }
 @media (min-width:768px){
   .blog_main {
-    padding-top:120px;
+    padding-top:90px;
     .mainbar {
       padding-right:300px;
     }
@@ -18,7 +20,10 @@
 }
 body {
   background-color:#edeff2;
-}
+  .container {
+    padding-left:0;
+    padding-right:0;
+  }
   .blog_main {
     position:relative;
     padding-left:0;
@@ -117,5 +122,7 @@ body {
     }
   }
   .sidebar {
-    top:120px;
+    top:90px;
   }
+}
+  

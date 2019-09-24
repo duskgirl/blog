@@ -8,61 +8,13 @@ require_once './functions.php';
 // 如果是邮箱和unique一起传递过来就表示是查询邮箱是否存在，是忘记密码页面发送过来的
 
 
-if(empty($_POST['email']) && empty($_POST['username']) && empty($_POST['password'])){
+if(empty($_POST['username']) && empty($_POST['password'])){
   exit('缺少必要参数');
 }
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
   check();
 }
 function check(){
-  // 校验邮箱唯一性
-  if(isset($_POST['email']) && empty($_POST['unique']) && empty($_POST['username']) && empty($_POST['password'])){
-    $email = $_POST['email'];
-    $email_sql = "select email from adminuser where email = '{$email}' limit 1";
-    $row = blog_select_one($email_sql);
-    $isAvailable = true;
-    if(!$row){
-    // 这里表示查询到不存在
-      echo json_encode(array('valid' => $isAvailable));
-    } else {
-    // 这里表示查询到存在
-      $isAvailable = false;
-      echo json_encode(array('valid' => $isAvailable));
-    }
-  }
-  // 校验用户名唯一性
-  if(isset($_POST['username']) && empty($_POST['unique']) && empty($_POST['password']) && empty($_POST['email'])){
-    $username = $_POST['username'];
-    $username_sql = "select name from adminuser where name = '{$username}' limit 1";
-    $row =blog_select_one($username_sql);
-    $isAvailable = true;
-    if(!$row){
-      // 这里表示查询到不存在
-      echo json_encode(array('valid' => $isAvailable));
-    } else {
-    // 这里表示查询到存在
-      $isAvailable = false;
-      echo json_encode(array('valid' => $isAvailable));
-    }
-  }
-  // 校验邮箱唯一性：不存在返回false，存在返回true
-  if(isset($_POST['email']) && isset($_POST['unique']) && $_POST['unique'] == 'false' && empty($_POST['username']) && empty($_POST['password'])){
-    $email = $_POST['email'];
-    $email_sql = "select email from adminuser where email = '{$email}' limit 1";
-    $row = blog_select_one($email_sql);
-    $isAvailable = true;
-    if($row){
-    // 这里表示查询到存在
-      echo json_encode(array('valid' => $isAvailable));
-    } else {
-    // 这里表示查询到不存在
-      $isAvailable = false;
-      echo json_encode(array('valid' => $isAvailable));
-    }
-  }
-
-
-
   // 检测用户名是否注册,登陆界面的查询
   if(isset($_POST['username']) && isset($_POST['unique']) && $_POST['unique'] == 'false') {
     $username = $_POST['username'];
@@ -80,7 +32,7 @@ function check(){
     }
   }
   // 校验密码与用户名是否匹配
-  if(isset($_POST['password']) && isset($_POST['username']) && empty($_POST['unique']) && empty($_POST['email'])){
+  if(isset($_POST['password']) && isset($_POST['username']) && empty($_POST['unique'])){
     $password = md5($_POST['password']);
     $username = $_POST['username'];
     $match_sql = "select name,password from adminuser where name = '{$username}' limit 1";
