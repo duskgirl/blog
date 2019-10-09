@@ -3,7 +3,7 @@
 // 添加后提交数据
 require_once './config.php';
 require_once './functions.php';
-blog_get_current_user();
+blog_get_admin_user();
 // 修改管理员账户渲染表单
 // 数据提交修改数据
 if($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 function get_page(){
   if(!empty($_POST['id'])&&!empty($_POST['page'])){
     $aid = $_POST['id'];
+    // 请求更多父评论的时候，父评论的page在增加，子评论的page永远为1,且size永远为2
     $page = $_POST['page'];
     if($page>=2){
       $size = 10;
@@ -20,6 +21,9 @@ function get_page(){
       $size = 2;
       $skip = $size*($page-1);
     }
+    $children_page = 1;
+    $children_size = 2;
+    $children_skip = $children_size*($children_page-1);
   // 点击查看更多评论的时候我就只是知道跳过多少行显示多少条数据即可
   // 我这里也应该是查询到所有的数据然后根据情况返回数据
   // 其实不可能单独请求父元素评论，父评论和子评论是要同时返回数据的
@@ -100,7 +104,7 @@ function get_page(){
       inner join user as u on c.user_id = u.id
       where c.audit_status = 1 and c.parent_id = {$item['id']}
       order by c.love desc
-      limit $skip,$size";
+      limit $children_skip,$children_size";
     // 获取查找到的子评论
     // 子评论将父评论也包含在里面了
     // 这里我应该多套一层加上parent_id或者？用来区分子评论是谁的子评论?也可能不需要区分,前端页面区分即可

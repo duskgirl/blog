@@ -6,27 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      border: solid 1px red;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    a {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  </style>
 </head>
 
 <body>
   <div>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-    </ul>
-    <p>
-      <span>借记卡思考的会计师</span> 段时间看会计师考试开始会计师
-    </p>
+    <a><span>爱的快乐健康进拉萨的克拉克森</span>爱神的箭卡就开始看大健康撒旦教散开佳都科技数据非黄寺大街咖啡机</a>
   </div>
-  <script src="./lib/jquery/jquery.min.js"></script>
-  <script>
-    $(function() {
-      $("ul").closest("div").find("p").css(
-        "border", "solid 5px red");
-      $("ul").closest("div").find("p").text("red");
-    })
-  </script>
 </body>
 
 </html>

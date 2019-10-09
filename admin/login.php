@@ -50,14 +50,14 @@ function login () {
   // 存一个登录标识
   $_SESSION['is_logged_in'] = true;
   // 为了后续可以直接获取当前登录用户的信息，这里直接将用户信息放到 session 中
-  $_SESSION['current_login_user'] = $user;
-  $_SESSION['current_login_user_id'] = $user['id'];
+  $_SESSION['admin_login_user'] = $user;
+  $_SESSION['admin_login_user_id'] = $user['id'];
   // 一切OK 可以跳转
   header('Location: /blog/admin/index.php');
 }
 // 退出登陆功能
 if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'logout'){
-  unset($_SESSION['current_login_user']);
+  unset($_SESSION['admin_login_user']);
 }
 ?>
 

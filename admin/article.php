@@ -1,7 +1,7 @@
 ﻿<?PHP
 require_once './config.php';
 require_once './functions.php';
-blog_get_current_user();
+blog_get_admin_user();
 // 获取文章分类
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
   getCategory();

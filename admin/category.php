@@ -2,7 +2,7 @@
 // 设置浏览者只能是浏览用户
 require_once './config.php';
 require_once './functions.php';
-blog_get_current_user();
+blog_get_admin_user();
 // 执行添加分类操作
 if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['name'])) {
   addCategory();
@@ -98,6 +98,7 @@ function getCategory(){
     <?php include './topbar.php'?>
     <div class="blog_admin_main">
       <!-- 以下是左边侧栏 -->
+      <?php $current_nav='category';?>
       <?php include './sidebar.php'?>
         <section class="blog_admin_center">
           <form action="<?php echo $_SERVER['PHP_SELF']?>" method="get" class="add_category">

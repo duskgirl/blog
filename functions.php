@@ -6,8 +6,9 @@ use PHPMailer\PHPMailer\Exception;
 require_once 'lib/PHPMailer-master/Exception.php';
 require_once 'lib/PHPMailer-master/PHPMailer.php';
 require_once 'lib/PHPMailer-master/SMTP.php';
+date_default_timezone_set('PRC');
 
-// session_start();
+session_start();
 // 连接数据库
 function blog_connect(){
   $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
@@ -54,12 +55,35 @@ function blog_update($sql){
   return true;
 }
 
-// 获取当前登陆用户信息，如果没有获取到则直接跳转到登录页面
+// 前端获取当前登陆用户信息，如果没有获取到则返回空,若获取到
 function blog_get_current_user(){
   if(empty($_SESSION['current_login_user'])) {
-    header('Location:/blog/admin/login.php');
+   return null;
   } else {
     return $_SESSION['current_login_user'];
+  }
+}
+// 网站访问量统计
+function blog_visit(){
+  if (getenv("HTTP_CLIENT_IP") &&strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown")){
+    $ip = getenv("HTTP_CLIENT_IP");
+  } else if (getenv("HTTP_X_FORWARDED_FOR")&&strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown")){
+    $ip = getenv("HTTP_X_FORWARDED_FOR");
+  } else if (getenv("REMOTE_ADDR") &&strcasecmp(getenv("REMOTE_ADDR"), "unknown")){
+    $ip = getenv("REMOTE_ADDR");
+  } else if (isset($_SERVER['REMOTE_ADDR'])&& $_SERVER['REMOTE_ADDR']&&strcasecmp($_SERVER['REMOTE_ADDR'],"unknown")){
+    $ip = $_SERVER['REMOTE_ADDR'];
+  } else {
+    $ip = "unknown";
+  }
+  // 获取当前日期
+  $created = date('Y-m-d');
+  $select_sql = "select ip,created from visit where ip='{$ip}' and created='{$created}' limit 1";
+  $result = blog_select_one($select_sql);
+  // 不存在该ip，那就插入数据
+  if(!$result){
+    $sql = "insert into visit (ip,created) values ('{$ip}','{$created}')";
+    blog_update($sql);
   }
 }
 // 给用户发送邮箱

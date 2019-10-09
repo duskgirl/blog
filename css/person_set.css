@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset 'utf-8';
 html {
   width: 100%;
   height: 100%;
@@ -40,14 +40,20 @@ img {
   }
   .blog_main .mainbar {
     padding-right: 0;
+    background-color: #fff;
+  }
+  .blog_main .mainbar .person_detail {
+    padding: 20px 10px 10px;
   }
 }
 @media (min-width: 768px) {
   .blog_main {
     padding-top: 90px;
   }
-  .blog_main .mainbar {
-    padding-right: 300px;
+  .blog_main .person_detail {
+    padding-left: 240px;
+    padding-right: 40px;
+    background-color: #fff;
   }
 }
 body {
@@ -63,16 +69,13 @@ body .blog_main {
 }
 body .blog_main .mainbar {
   width: 100%;
-  min-height: 750px;
+  min-height: 550px;
   position: relative;
 }
 body .blog_main .mainbar .person_detail {
   width: 100%;
   height: 100%;
-  padding-left: 240px;
-  padding-right: 40px;
-  background-color: #fff;
-  min-height: 750px;
+  min-height: 550px;
 }
 body .blog_main .mainbar .person_detail .person_set {
   padding: 40px 0;
@@ -104,27 +107,52 @@ body .blog_main .mainbar .person_detail .person_set h4::after {
 body .blog_main .mainbar .person_detail .person_set .modify {
   width: 100%;
 }
-body .blog_main .mainbar .person_detail .person_set .modify .input-group {
+body .blog_main .mainbar .person_detail .person_set .modify .form-group {
   width: 100%;
 }
-body .blog_main .mainbar .person_detail .person_set .modify .input-group .text {
+body .blog_main .mainbar .person_detail .person_set .modify .form-group .text {
   font-weight: bold;
   color: #51565e;
-  padding: 5px 0;
 }
-body .blog_main .mainbar .person_detail .person_set .modify .input-group input {
+body .blog_main .mainbar .person_detail .person_set .modify .form-group .err_container {
+  position: relative;
+}
+body .blog_main .mainbar .person_detail .person_set .modify .form-group .err_container input {
   display: block;
   width: 100%;
 }
-body .blog_main .mainbar .person_detail .person_set .modify .input-group img {
+body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border: solid 1px #ccc;
+}
+body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller {
+  width: 100%;
+}
+body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller ul li {
+  text-align: center;
+  padding: 10px;
+}
+body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller ul li img {
   display: block;
-  margin-top: 20px;
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  margin-top: 5px;
+}
+body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller ul li img.active {
+  width: 120px;
+  height: 120px;
 }
 body .blog_main .mainbar .person_detail .person_set .modify .btn {
-  margin-top: 10px;
+  margin-top: 20px;
   width: 100%;
   background-color: #17a2b8;
   color: #fff;

@@ -142,9 +142,6 @@ img {
   color: #fd5c63;
   font-weight: bold;
 }
-.comment .comment-detail .comment-row .comment-column-right .comment-content .reply .reply-block .reply-content .answer {
-  color: #adadad;
-}
 .comment .comment-detail .comment-row .comment-column-right .comment-content .reply .reply-more {
   padding: 5px 0;
   display: block;
@@ -159,20 +156,22 @@ img {
 }
 .comment .comment-detail .comment-row .comment-column-right .comment-content .reply .comment-more-detail {
   display: none;
+  background-color: #f7f7f7;
 }
 .comment .comment-detail .comment-row .comment-column-right .comment-content .reply .comment-more-detail .more-reply {
   color: #000;
   font-weight: bold;
   position: relative;
   border-bottom: solid 1px #adadad;
-  padding: 5px 0;
+  padding: 10px;
 }
 .comment .comment-detail .comment-row .comment-column-right .comment-content .reply .comment-more-detail .more-reply:before {
   content: '';
   position: absolute;
-  left: -10px;
+  left: 0;
+  top: 0;
   width: 4px;
-  height: 30px;
+  height: 40px;
   background-color: #17a2b8;
 }
 .comment .comment-detail .comment-row .comment-column-right .comment-content .reply .reply-more-more {
@@ -187,13 +186,13 @@ img {
 .comment .comment-detail .comment-row .comment-column-right .interaction {
   padding: 4px 0;
 }
-.comment .comment-detail .comment-row .comment-column-right .interaction .fire {
-  color: #17a2b8;
-}
 .comment .comment-detail .comment-row .comment-column-right .interaction a {
   display: inline-block;
   color: #a3a3a3;
   font-size: 12px;
+}
+.comment .comment-detail .comment-row .comment-column-right .interaction a.love_fire {
+  color: #17a2b8;
 }
 .comment .comment-detail .comment-row .comment-column-right .interaction a.reply-switch {
   margin-left: 20px;

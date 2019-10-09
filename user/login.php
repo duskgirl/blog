@@ -2,6 +2,11 @@
 // 载入配置文件
 require_once '../config.php';
 require_once '../functions.php';
+if(empty($_SESSION['url'])){
+  $path = '/blog/index.php';
+} else {
+  $path = $_SESSION['url'];
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   login();
 }
@@ -10,6 +15,7 @@ function login () {
   // 1. 接收并校验
   // 2. 持久化
   // 3. 响应
+  global $path;
   if (empty($_POST['username'])) {
     $GLOBALS['message'] = '请填写用户名';
     return;
@@ -89,8 +95,8 @@ function login () {
   // 为了后续可以直接获取当前登录用户的信息，这里直接将用户信息放到 session 中
   $_SESSION['current_login_user'] = $user;
   $_SESSION['current_login_user_id'] = $user['id'];
-  // 一切OK 可以跳转
-  header('Location: /blog/index.php');
+  // 一切OK 可以跳转到原来的页面或者是首页
+  header('Location: ' . $path);
 }
 // 退出登陆功能
 if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'logout'){

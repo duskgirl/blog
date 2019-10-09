@@ -1,7 +1,7 @@
 <?php
 require_once './config.php';
 require_once './functions.php';
-blog_get_current_user();
+blog_get_admin_user();
 // 页面搜索功能实现
 // 渲染页面查询操作(有/无id)
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
@@ -19,19 +19,6 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
     }
     $search_value = $search_result;
   }
-  // $test = '我喜欢你';
-  // $test = trim($test);
-  // $num = mb_strlen($test);
-  // $result = '';
-  // for($i=0;$i<$num;$i++){
-  //   $result .= mb_substr($test,$i,1).'%';
-  // }
-  // var_dump($result);
-  // $test = explode(' ',$test);
-  // $test = implode('a',$test);
-  // var_dump($test);
-  // 如果两种情况都有了的话 $search => &search=3&page=2
-  // var_dump($search);
   require_once './getarticlepage.php';
   if(!empty($_GET['articleId'])){
     deleteArticle();
@@ -40,11 +27,22 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
 }
 function getArticleMana(){
   global $per_list,$skip,$search_value;
-  $sql = "select a.header,a.author,a.pubtime,a.id,a.content,a.category_id,c.id as categoryid,c.name as categoryname from article as a inner join category as c on a.category_id = c.id where a.header like '%{$search_value}%' order by a.id desc limit {$skip},{$per_list}";
+  $sql = "select
+  a.header,
+  a.author,
+  a.pubtime,
+  a.id,
+  a.content,
+  a.category_id,
+  c.id as categoryid,
+  c.name as categoryname 
+  from article as a 
+  inner join category as c on a.category_id = c.id 
+  where a.header like '%{$search_value}%' 
+  order by a.id desc 
+  limit {$skip},{$per_list}";
+  // var_dump($sql);
   $result = blog_select_all($sql);
-  if(!$result) {
-    $GLOBALS['err_message'] = '查询数据失败';
-  }
 }
 
 // 删除指定
@@ -86,6 +84,7 @@ function deleteArticle(){
   <div class="container-fluid">
     <?php include './topbar.php'?>
     <div class="blog_admin_main">
+    <?php $current_nav='article';?>
       <?php include './sidebar.php'?>
     <section class="blog_admin_center">
       <ol class="breadcrumb">
@@ -118,6 +117,7 @@ function deleteArticle(){
             <th>操作</th>
           </tr>
           <tbody>
+            <?php if($total>0):?>
             <?php if(isset($array)):?>
             <?php foreach($array as $key => $item): ?>
             <tr>
@@ -130,7 +130,7 @@ function deleteArticle(){
             </tr>
             <?php endforeach?>
             <?php endif?>
-            <?php if($total === 0):?>
+            <?php elseif($total == 0):?>
             <tr class="nofound">
               <td colspan="5">抱歉！没有找到相关文章!</td>
             </tr>

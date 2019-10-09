@@ -2,7 +2,7 @@
 <?php
 require_once 'config.php';
 require_once 'functions.php';
-blog_get_current_user();
+blog_get_admin_user();
 // 查询管理员
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
   // 删除操作
@@ -54,6 +54,7 @@ function delete_admin(){
   <div class="container-fluid">
     <?php include './topbar.php'?>
     <div class="blog_admin_main">
+      <?php $current_nav='admin';?>
       <?php include './sidebar.php'?>
     <section class="blog_admin_center">
       <ol class="breadcrumb">
@@ -101,9 +102,6 @@ function delete_admin(){
               </tr>
             <?php endforeach?>
             <?php endif?>
-            <tr class="nofound">
-              <td colspan="3">抱歉！没有找到该用户!</td>
-            </tr>
           </tbody>
         </thead>
       </table>

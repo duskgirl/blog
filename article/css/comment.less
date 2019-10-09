@@ -97,7 +97,7 @@
             line-height: 1.8em;
             color: #111;
           }
-          .reply {
+          .reply {  
             .reply-block {
               background-color: #f7f7f7;
               padding:10px;
@@ -107,9 +107,6 @@
                 .reply-user {
                   color: @helpColor;
                   font-weight: bold;
-                }
-                .answer {
-                  color: #adadad;
                 }
               }
             }
@@ -127,18 +124,20 @@
             }
             .comment-more-detail {
               display: none;
+              background-color: #f7f7f7;
               .more-reply {
                 color:#000;
                 font-weight:bold;
                 position: relative;
                 border-bottom:solid 1px #adadad;
-                padding:5px 0;
+                padding:10px;
                 &:before {
                   content: '';
                   position:absolute;
-                  left:-10px;
+                  left:0;
+                  top:0;
                   width:4px;
-                  height:30px;
+                  height:40px;
                   background-color:@mainColor;
                 }
               }
@@ -156,13 +155,13 @@
         }  
         .interaction {
           padding:4px 0;
-          .fire {
-            color: @mainColor;
-          }
           a {
             display: inline-block;
             color: #a3a3a3;
             font-size:12px;
+            &.love_fire {
+              color: @mainColor;
+            }
             &.reply-switch {
               margin-left:20px;
             }

@@ -1,32 +1,40 @@
 <?php
 require_once './config.php';
 require_once './functions.php';
-blog_get_current_user();
+blog_get_admin_user();
+// 设置时间
+date_default_timezone_set('PRC');
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
   total();
 }
 
 function total(){
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  if(!$connect) {
-    exit('连接数据库失败');
+  // 研究下这里做什么图表好看,以及后台常用什么图表
+  // http://www.cssmoban.com/cssthemes/houtaimoban/(后台模板网站)
+  // 一般就是统计最近一周新注册用户
+  //获取待审核评论数
+  $comment_sql = 'select 
+  count(audit_status) as wait_check 
+  from comment where 
+  audit_status = 0' ;
+  $result_comment = blog_select_all($comment_sql);
+  // 获取新注册用户
+  $user_sql = 'select 
+  count(userstats) as new_register
+  from user where
+  userstats = 1 and DATE_SUB(CURDATE(), INTERVAL 6 DAY) <= created';
+  $result_user = blog_select_all($user_sql); 
+  foreach($result_user as $key => $item){
+    if(isset($item['wait_check'])){
+      $GLOBALS['result'][] = $item;
+    }
+    if(isset($item['new_register'])){
+      $GLOBALS['result'][] = $item;
+    }
   }
-  mysqli_set_charset($connect,'utf8');
-  $sql_article = "select count('total') as total from article";
-  $query_article = mysqli_query($connect,$sql_article);
-  if(!$query_article) {
-    exit('查询文章数据失败');
-  }
-  $GLOBALS['total_article'] = mysqli_fetch_array($query_article);
-
-  // 获取分类
-  $sql_category = "select count('total') as total from category";
-  $query_category = mysqli_query($connect,$sql_category);
-  if(!$query_category) {
-    exit('查询分类数据失败');
-  }
-  $GLOBALS['total_category'] = mysqli_fetch_array($query_category);
 }
+
+  
 ?>
 
 <!DOCTYPE html>
@@ -48,19 +56,54 @@ function total(){
     <?php include './topbar.php'?>
     <div class="blog_admin_main">
       <!-- 以下是左边侧栏 -->
+      <?php $current_nav='index';?>
       <?php include './sidebar.php'?>
       <section class="blog_admin_center">
-        <h3>站点内容统计</h3>
-        <ul class="clearfix">
-          <li class="pull-left"><a href="/blog/admin/article.mana.php">总共文章 <span><?php echo $total_article['total']?></span> 篇</a></li>
-          <li class="pull-left"><a href="/blog/admin/category.php">总共 <span><?php echo $total_category['total']?></span> 个分类</a></li>
-          <li class="pull-left"><a href="#">总共 <span>0</span> 个评论待审核</a></li>
-        </ul>
+        <!-- 区域滚动 -->
+        <div id="wrapper">
+          <div id="scroller">
+            <ul>
+              <h3>站点内容统计</h3>
+              <?php if(isset($result)):?>
+              <?php foreach($result as $key => $item):?>
+              <?php if(isset($item['wait_check'])):?>
+              <li class="comment pull-left">
+                <a href="/blog/admin/comment.php?audit_status=0">
+                <span class="fa fa-comment-o"></span>待审核评论：
+                <span class="wait_check"><?php echo $item['wait_check']?></span>
+                </a>
+              </li>
+              <?php endif?>
+              <?php if(isset($item['new_register'])):?>
+              <li class="user pull-left">
+                <a href="/blog/admin/user.php?new_register=week">
+                  <span class="fa fa-user-plus"></span>新注册用户：
+                  <span class="new_user"><?php echo $item['new_register']?></span>
+                </a>
+              </li>
+              <?php endif?>
+              <?php endforeach?>
+              <?php endif?>
+              <!-- php获取当前时间，显示时间即可 -->
+              <li class="current_time pull-left">当前时间：<?php echo date('Y/m/d');?></li>
+              <li>
+                <!-- 放置网站浏览量 -->
+                <!-- 使用echarts -->
+                <div id="bar" class="clearfix"></div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
     </div>
   </div>
   <script src="./lib/jquery/jquery.min.js"></script>
   <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+  
+  <script src="./lib/iscroll/iscroll-probe.js"></script>
+  <!-- 图表 -->
+  <script src="./lib/echarts/dist/echarts.min.js"></script>
+  <script src="./js/index.js"></script>
 </body>
 
 </html>

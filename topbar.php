@@ -33,7 +33,7 @@
             <li class="is_message"><a href="/blog/person.php">个人中心</a></li>
             <!-- 当用户没有消息的时候 个人中心后面不加小红点 -->
             <!-- <li class="no_message"><a href="#">个人中心</a></li> -->
-            <li><a href="#">退出登陆</a></li>
+            <li><a href="/blog/user/login.php?action=logout">退出登陆</a></li>
           </ul>
         </div>
         

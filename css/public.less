@@ -1,0 +1,27 @@
+@import 'var';
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.underline {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    left:0;
+    bottom:0;
+    width:40px;
+    height:2px;
+    background-color: @mainColor;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    left:40px;
+    bottom:0;
+    width:40px;
+    height:2px;
+    background-color: @helpColor;
+  }
+}

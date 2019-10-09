@@ -1,12 +1,18 @@
 <?php
 require_once '../config.php';
 require_once '../functions.php';
-// 获取所有评论数据
-// if(empty($_GET['id'])||(empty($_GET['article_id'])||empty($_GET['page']))||(empty($_GET['comment_id'])||empty($_GET['page']))){
-//   exit('缺少必要的参数!');
-// }
 if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   $id = $_GET['id'];
+  // 获取当前页面的url地址存cookie,保证用户登录时还能返回当前页面
+  $url = $_SERVER['REQUEST_URI'];
+  $_SESSION['url'] = $url;
+  $user = blog_get_current_user();
+  // 提交评论的时候还需在验证用户是否登陆
+  if(empty($user)){
+    $user_id = 0;
+  } else {
+    $user_id = $user['id'];
+  }
 } 
 
 ?>
@@ -16,346 +22,36 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   <!-- 登陆时应该显示用户头像在某个位置 -->
   <!-- texta如何限定字符数,限制100个字符 -->
   <!-- 两种情况，这种是未登陆的 -->
-  <!-- <p class="warning"><span class="fa fa-exclamation-triangle"></span> 注册用户登录后才能发表评论，请先<a href="#">登录</a>或<a href="#">注册</a></p> -->
+  <?php if(empty($user)):?>
+  <!-- 将当前页面的url地址保存cookie,登陆时看cookie是否有这个url的cookie,
+  有就跳转到cookie中的url地址,没有就跳转到首页 -->
+  <p class="warning">
+    <span class="fa fa-exclamation-triangle"></span>
+     注册用户登录后才能发表评论，请先
+     <a href="/blog/user/login.php">登录</a>
+     或
+     <a href="/blog/user/register.php">注册</a></p>
+  <?php endif?>
   <!-- 登陆以后的话什么都不显示 -->
-  <form action="">
+  <!-- 考虑还是发送ajax请求 -->
+  <!-- 弄一个提示框提示用户出现的问题或者是提示成功等 -->
+  <!-- 提示问题消息 -->
+  <!-- 默认均看不见 -->
+  <form>
     <textarea  name="comment" class="form-control form-comment">来说几句吧....</textarea>
-    <input type="submit" value="评论" class="btn" />
+    <?php if(empty($user)):?>
+    <input type="submit" value="评论" class="btn parent_comment_submit" disabled="disabled" />
+    <?php else:?>
+    <input type="submit" value="评论" class="btn parent_comment_submit" />
+    <?php endif?>
   </form>
-  <!-- 无评论的时候显示 -->
-  <!-- <p class="no_comment">还没有评论，快来抢沙发吧！</p> -->
-  <!-- 有评论的时候显示 -->
   <ul class="media-list comment-detail">
-    <h3><span class="fa fa-commenting-o"></span> 最新评论</h3>
-    <!-- <?php //if(isset($parent_comment)):?>
-    <?php //$parent_num = 0?>
-    <?php //foreach($parent_comment as $key => $parent):?>
-    <?php //$parent_num++?>
-   不是引用评论，都排最前面,我应该知道这条评论的id,然后根据这条评论的id来找到回复此条评论的内容 -->
-    <!-- 上面应该是循环所有parent_id 为null的 -->
-    <!-- <?php //if($parent_num>=1&&$parent_num<=2):?>
-    <li class="media comment-row">
-      <div class="media-left">
-        <img class="media-object avatar" src="<?php// echo $parent['avatar']?>" alt="头像">
-      </div>
-      <div class="media-body comment-column-right">
-        <h4 class="media-heading username"><?php //echo $parent['name']?></h4>
-        <p class="time"><span class="fa fa-clock-o"> </span> <?php //echo $parent['comment_time']?></p>
-        <div class="comment-content">
-          <p class="comment-call">
-          //<?php //echo $parent['content']?>
-          </p> -->
-          <!-- <div class="reply"> -->
-            <!-- 回复者名称 -->
-            <?php //if(isset($children_comment)):?>
-            <?php //$children_num=0;?>
-            <?php //foreach($children_comment as $key => $children):?>
-            <!-- 这里设置是否有回复评论 -->
-            <?php //if($children['parent_id']==$parent['id']):?>
-            <?php //$children_num++?>
-            <?php //if($children_num>=1&&$children_num<=2):?>
-            <!-- 如何保证这里只显示两条信息 -->
-            <!-- <div class="reply-block">
-              <p class="reply-content">
-              <a href="#" class="reply-user"><?php //echo $children['name']?></a>:<?php //echo $children['content']?>
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;">
-                  <span class="glyphicon glyphicon-fire fire">
-                  </span> 赞
-                  <?php //if($children['love']>=1):?>
-                  <span>
-                  <?php //echo $children['love']?>
-                  </span>
-                  <?php //endif?>
-                </a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time"><?php //echo $children['comment_time']?></span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-            <?php //endif?>
-            <?php //endif?>
-            <?php //endforeach?>
-            <?php //endif?>
-            <?php //if($children_num>2):?> -->
-            <!-- 评论被展开以后能不能做个按钮收起评论,一篇文章应该只有一个收起评论能找到对应的 -->
-            <!-- 做一个评论人被点开以后的界面,几乎和个人页面我的评论一样先把个人页面做好，在做这个页面吧 -->
-            <!-- 赞要有用户id,用户点赞时间,文章id,文章评论id(也就是被点赞的评论id),被点赞用户id,点赞次数 -->
-            <!-- 当一个人被点赞那么就找个这个用户给他发送消息谁给你点了赞即可 -->
-            <!-- <a href="javascript:;"  class="reply-more">
-              查看全部<?php //echo $children_num?>条回复<span class="fa fa-chevron-right"></span>
-            </a> 
-            <?php //endif?> -->
-
-            <!-- 当用户点击了查看全部回复的时候才显示 -->
-            <!-- <div class="comment-more-detail">
-              <p class="more-reply">更多回复</p>
-              <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">哄哄</a> 
-                <span class="answer">回复</span> 
-                <a href="#" class="reply-user">团长</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href=""><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-            <!-- 还有多余的评论时显示 -->
-            <!-- <a href="#" class="reply-more-more">查看更多回复</a>  -->
-          <!-- </div>
-        </div> -->
-        <!-- <div class="interaction">
-           有赞的时候才显示赞的数字，没有赞的时候不显示赞的数 -->
-          <!-- <a href="javascript:;" class="support">
-            <span class="fa fa-thumbs-o-up"></span>
-             赞
-             <?php //if($parent['love']>=1):?>
-            <span><?php //echo $parent['love']?></span>
-            <?php //endif?>
-          </a>  -->
-          <!-- <a href="javascript:;" class="reply-switch"><span class="fa fa-comment-o"></span> 回复</a>
-           回复表单 -->
-          <!-- 回复评论默认显示两条 不足两条的直接显示，超过两条的，先显示查看全部多少条回复，然后用户点击以后再显示默认显示6条，
-        用户点击查看更多回复再显示6条，直到显示完毕，每条评论也显示赞和回复，同时最好赞的数量越多排在越前面 -->
-          <!-- <form action="" class="reply_form">
-            <textarea name="reply" class="reply_box"></textarea>
-            <input type="submit" value="回复" class="btn reply_btn">
-          </form>
-        </div>
-      </div> -->
-    <!-- </li>
-    <?php //endif?>
-    <?php //endforeach?>
-    <?php //if($parent_num>2):?>
-    <p class="comment_more">
-      <a href="javascript:;" class="parent_more">查看更多评论</a>
-    </p>
-    <?php //endif?>
-    <?php //else:?>
-    <p class="no_comment">还没有评论，快来抢沙发吧！</p>
-    <?php //endif?> --> --> -->
-   
-         
-          
-    <!-- <li class="media comment-row">
-      <div class="media-left">
-        <img class="media-object avatar" src="images/avatar.jpg" alt="头像">
-      </div>
-      <div class="media-body comment-column-right">
-        <h4 class="media-heading username">大思考</h4>
-        <p class="time"><span class="fa fa-clock-o"> </span> 2019-9-10 12:21:21</p>
-        <div class="comment-content">
-          <p class="comment-call">
-          今天天气真好啊！在中餐厅正式营业之前，大家还是比较紧张的 为还有一些事情没有决定
-          下来，其中比较严重的一个就是节目的表演问题了。因为这一个问题的存在，杨紫杜海涛 以及沈梦辰开始聚在师严重的一个
-          就是节目的表演
-          </p>
-          <div class="reply"> -->
-            <!-- 回复者名称 -->
-            <!-- <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">居安思危</a>:这20天真的是翻天覆地的变化.从吃不饱到随便吃.水果肉随便买.
-              这在20年前真的是无法想象的.在抖音上看到非洲很多国家都有中国农业技术援助中心.教当地人种蔬菜.现在非洲也有
-              很多蔬菜品种了.这在以前都是没有的.很多非洲国家都感谢中国
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a><span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-
-            <!-- <div class="reply-block">
-              <p class="reply-content">
-              <a href="#" class="reply-user">哄哄</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-            <!-- 评论被展开以后能不能做个按钮收起评论,一篇文章应该只有一个收起评论能找到对应的 -->
-            <!-- 做一个评论人被点开以后的界面,几乎和个人页面我的评论一样先把个人页面做好，在做这个页面吧 -->
-            <!-- <a href="javascript:;"  class="reply-more">查看全部10条回复<span class="fa fa-chevron-right"></span></a>  -->
-
-            <!-- 当用户点击了查看全部回复的时候才显示 -->
-            <!-- <div class="comment-more-detail">
-              <p class="more-reply">更多回复</p>
-              <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">哄哄</a> 
-                <span class="answer">回复</span> 
-                <a href="#" class="reply-user">团长</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href=""><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-            <!-- 还有多余的评论时显示 -->
-            <!-- <a href="#" class="reply-more-more">查看更多回复</a> 
-          </div>
-        </div> -->
-        <!-- <div class="interaction"> -->
-          <!-- 有赞的时候才显示赞的数字，没有赞的时候不显示赞的数 -->
-          <!-- <a href="javascript:;" class="support"><span class="fa fa-thumbs-o-up"></span> 赞<span>1</span></a>
-          <a href="javascript:;" class="reply-switch"><span class="fa fa-comment-o"></span> 回复</a> -->
-          <!-- 回复表单 -->
-          <!-- 回复评论默认显示两条 不足两条的直接显示，超过两条的，先显示查看全部多少条回复，然后用户点击以后再显示默认显示6条，
-        用户点击查看更多回复再显示6条，直到显示完毕，每条评论也显示赞和回复，同时最好赞的数量越多排在越前面 -->
-          <!-- <form action="" class="reply_form">
-            <textarea name="reply" class="reply_box"></textarea>
-            <input type="submit" value="回复" class="btn reply_btn">
-          </form>
-        </div>
-      </div>
-    </li> -->
-    <!-- <li class="media comment-row">
-      <div class="media-left">
-        <img class="media-object avatar" src="images/avatar.jpg" alt="头像">
-      </div>
-      <div class="media-body comment-column-right">
-        <h4 class="media-heading username">大思考</h4>
-        <p class="time"><span class="fa fa-clock-o"> </span> 2019-9-10 12:21:21</p>
-        <div class="comment-content">
-          <p class="comment-call">
-          今天天气真好啊！在中餐厅正式营业之前，大家还是比较紧张的 为还有一些事情没有决定
-          下来，其中比较严重的一个就是节目的表演问题了。因为这一个问题的存在，杨紫杜海涛 以及沈梦辰开始聚在师严重的一个
-          就是节目的表演
-          </p>
-          <div class="reply"> -->
-            <!-- 回复者名称 -->
-            <!-- <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">居安思危</a>:这20天真的是翻天覆地的变化.从吃不饱到随便吃.水果肉随便买.
-              这在20年前真的是无法想象的.在抖音上看到非洲很多国家都有中国农业技术援助中心.教当地人种蔬菜.现在非洲也有
-              很多蔬菜品种了.这在以前都是没有的.很多非洲国家都感谢中国
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href=""><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a><span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-
-            <!-- <div class="reply-block">
-              <p class="reply-content">
-              <a href="#" class="reply-user">哄哄</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-            <!-- 评论被展开以后能不能做个按钮收起评论,一篇文章应该只有一个收起评论能找到对应的 -->
-            <!-- 做一个评论人被点开以后的界面,几乎和个人页面我的评论一样先把个人页面做好，在做这个页面吧 -->
-            <!-- <a href="javascript:;"  class="reply-more">查看全部10条回复<span class="fa fa-chevron-right"></span></a>  -->
-            <!-- 当用户点击了查看全部回复的时候才显示 -->
-            <!-- <div class="comment-more-detail">
-              <p class="more-reply">更多回复</p>
-              <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">哄哄</a> 
-                <span class="answer">回复</span> 
-                <a href="#" class="reply-user">团长</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>
-            </div> -->
-            <!-- 还有多余的评论时显示 -->
-            <!-- <a href="javascript:;" class="reply-more-more">查看更多回复</a> 
-            
-          </div>
-        </div>
-        <div class="interaction"> -->
-          <!-- 有赞的时候才显示赞的数字，没有赞的时候不显示赞的数 -->
-          <!-- <a href="javascript:;" class="support"><span class="fa fa-thumbs-o-up"></span> 赞<span>1</span></a>
-          <a href="javascript:;" class="reply-switch"><span class="fa fa-comment-o"></span> 回复</a> -->
-          <!-- 回复表单 -->
-          <!-- 回复评论默认显示两条 不足两条的直接显示，超过两条的，先显示查看全部多少条回复，然后用户点击以后再显示默认显示6条，
-        用户点击查看更多回复再显示6条，直到显示完毕，每条评论也显示赞和回复，同时最好赞的数量越多排在越前面 -->
-          <!-- <form action="" class="reply_form">
-            <textarea name="reply" class="reply_box"></textarea>
-            <input type="submit" value="回复" class="btn reply_btn">
-          </form>
-        </div>
-      </div>
-    </li>
-
-    <li class="media comment-row">
-      <div class="media-left">
-        <img class="media-object avatar" src="images/avatar.jpg" alt="头像">
-      </div>
-      <div class="media-body comment-column-right">
-        <h4 class="media-heading username">大思考</h4>
-        <p class="time"><span class="fa fa-clock-o"> </span> 2019-9-10 12:21:21</p>
-        <p class="comment-content">今天天气真好啊！在中餐厅正式营业之前，大家还是比较紧张的 为还有一些事情没有决定
-          下来，其中比较严重的一个就是节目的表演问题了。因为这一个问题的存在，杨紫杜海涛 以及沈梦辰开始聚在师严重的一个
-          就是节目的表演
-        </p>
-        <div class="interaction"> -->
-          <!-- 有赞的时候才显示赞的数字，没有赞的时候不显示赞的数 -->
-          <!-- <a href="javascript:;" class="support"><span class="fa fa-thumbs-o-up"></span> 赞<span>1</span></a>
-          <a href="javascript:;" class="reply-switch"><span class="fa fa-comment-o"></span> 回复</a> -->
-          <!-- 回复表单 -->
-          <!-- <form action="" class="reply_form">
-            <textarea name="reply" class="reply_box"></textarea>
-            <input type="submit" value="回复" class="btn reply_btn">
-          </form>
-        </div>
-      </div>
-    </li> -->
-    
+    <h3><span class="fa fa-commenting-o"></span> 最新评论</h3>        
   </ul>
  
 </div>
 <script src="/blog/lib/jquery/jquery.min.js"></script>
+<script src="/blog/lib/artDialog-master/dialog.js"></script>
 <script src="/blog/lib/art-template/template-web.js"></script>
 <script src="/blog/article/js/comment.js"></script>
 <!-- 新建一个评论模板 -->
@@ -363,7 +59,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
 <script type="text/x-art-template" id="comment">
 {{if(num>=1)}}
 {{each parent item index}}
-<li class="media comment-row" id="{{item.id}}">
+<li class="media comment-row" id="{{item.id}}" page="1">
   <div class="media-left">
     <img class="media-object avatar" src="{{item.avatar}}" alt="头像">
   </div>
@@ -375,17 +71,19 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
       <div class="reply">
         {{each children value index}}
         {{if(value.parent_id == item.id)}}
-        <div class="reply-block">
+        <div class="reply-block" id="{{value.id}}">
           <p class="reply-content">
             <a href="#" class="reply-user">{{value.name}}</a>: {{value.content}}
           </p>
           <div class="interaction">
-            <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>{{value.love}}</span></a>
-            <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a><span class="reply-time">{{value.comment_time}}</span>
-            <form action="" class="reply_form">
-              <textarea name="reply" class="reply_box"></textarea>
-              <input type="submit" value="回复" class="btn reply_btn">
-            </form>
+            <a href="javascript:;" class="love"><span class="glyphicon glyphicon-fire no_fire"></span> 赞
+            {{if(value.love>0)}}
+            <span class="love_num">{{value.love}}</span>
+            {{else}}
+            <span class="love_num"></span>
+            {{/if}}
+          </a>
+           <span class="reply-time"><span class="fa fa-clock-o"><span>  {{value.comment_time}}</span>
           </div>
         </div>
         {{/if}}
@@ -395,30 +93,20 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
         {{/if}}
         <div class="comment-more-detail">
           <p class="more-reply">更多回复</p>
-          <div class="reply-block">
-          <p class="reply-content">
-            <a href="#" class="reply-user">哄哄</a> 
-            <span class="answer">回复</span> 
-            <a href="#" class="reply-user">团长</a>:靠自己呗！
-          </p>
-          <div class="interaction">
-            <a href=""><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-            <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-            <span class="reply-time">2小时前</span>
-            <form action="" class="reply_form">
-              <textarea name="reply" class="reply_box"></textarea>
-              <input type="submit" value="回复" class="btn reply_btn">
-            </form>
-          </div>
-        </div> -->
-        <a href="#" class="reply-more-more">查看更多回复</a> 
+        </div>
       </div>
     </div>
     <div class="interaction">
-      <a href="javascript:;" class="support"><span class="fa fa-thumbs-o-up"></span> 赞<span>1</span></a>
+      <a href="javascript:;" class="love"><span class="fa fa-thumbs-o-up  no_fire"></span> 赞
+        {{if(item.love>0)}}
+          <span class="love_num">{{item.love}}</span>
+          {{else}}
+          <span class="love_num"></span>
+        {{/if}}
+      </a>
       <a href="javascript:;" class="reply-switch"><span class="fa fa-comment-o"></span> 回复</a>
       <form action="" class="reply_form">
-        <textarea name="reply" class="reply_box"></textarea>
+        <textarea name="reply" class="reply_box form-comment"></textarea>
         <input type="submit" value="回复" class="btn reply_btn">
       </form>
     </div>
@@ -438,7 +126,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
 <script type="text/x-art-template" id="parent_more">
 {{if(parent_length>=1)}}
 {{each parent item index}}
-<li class="media comment-row" id="{{item.id}}">
+<li class="media comment-row" id="{{item.id}}"  page="1">
   <div class="media-left">
     <img class="media-object avatar" src="{{item.avatar}}" alt="头像">
   </div>
@@ -450,17 +138,19 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
       <div class="reply">
         {{each children value index}}
         {{if(value.parent_id == item.id)}}
-        <div class="reply-block">
+        <div class="reply-block" id="{{value.id}}">
           <p class="reply-content">
             <a href="#" class="reply-user">{{value.name}}</a>: {{value.content}}
           </p>
           <div class="interaction">
-            <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>{{value.love}}</span></a>
-            <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a><span class="reply-time">{{value.comment_time}}</span>
-            <form action="" class="reply_form">
-              <textarea name="reply" class="reply_box"></textarea>
-              <input type="submit" value="回复" class="btn reply_btn">
-            </form>
+            <a href="javascript:;" class="love"><span class="glyphicon glyphicon-fire no_fire"></span> 赞
+              {{if(value.love>0)}}
+                <span class="love_num">{{value.love}}</span>
+                {{else}}
+                <span class="love_num"></span>
+              {{/if}}
+            </a>
+            <span class="reply-time"><span class="fa fa-clock-o"></span> {{value.comment_time}}</span>
           </div>
         </div>
         {{/if}}
@@ -470,30 +160,20 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
         {{/if}}
         <div class="comment-more-detail">
           <p class="more-reply">更多回复</p>
-          <div class="reply-block">
-          <p class="reply-content">
-            <a href="#" class="reply-user">哄哄</a> 
-            <span class="answer">回复</span> 
-            <a href="#" class="reply-user">团长</a>:靠自己呗！
-          </p>
-          <div class="interaction">
-            <a href=""><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-            <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-            <span class="reply-time">2小时前</span>
-            <form action="" class="reply_form">
-              <textarea name="reply" class="reply_box"></textarea>
-              <input type="submit" value="回复" class="btn reply_btn">
-            </form>
-          </div>
-        </div> -->
-        <a href="#" class="reply-more-more">查看更多回复</a> 
+        </div>
       </div>
     </div>
     <div class="interaction">
-      <a href="javascript:;" class="support"><span class="fa fa-thumbs-o-up"></span> 赞<span>1</span></a>
+      <a href="javascript:;" class="love"><span class="fa fa-thumbs-o-up"></span> 赞
+        {{if(item.love>0)}}
+          <span class="love_num">{{item.love}}</span>
+          {{else}}
+          <span class="love_num"></span>
+        {{/if}}
+      </a>
       <a href="javascript:;" class="reply-switch"><span class="fa fa-comment-o"></span> 回复</a>
       <form action="" class="reply_form">
-        <textarea name="reply" class="reply_box"></textarea>
+        <textarea name="reply" class="reply_box form-comment"></textarea>
         <input type="submit" value="回复" class="btn reply_btn">
       </form>
     </div>
@@ -501,21 +181,52 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
 </li>
 {{/each}}
 {{if(parent_length<10)}}
+  <p class="no_comment">没有更多评论了</p>
+{{else}}
   <p class="comment_more">
-  <span class="parent_more">没有更多评论了</span>
-  </p>
-{{/if}}
-{{if(parent_length<1)}}
-  <p class="comment_more">
-   没有更多评论了
+    <a href="javascript:;" class="parent_more">查看更多评论</a>
   </p>
 {{/if}}
 {{else}}
-<p class="no_comment">还没有评论，快来抢沙发吧！</p>
+  <p class="no_comment">
+   没有更多评论了
+  </p>
 {{/if}}
 </script>
 <script type="text/x-art-template" id="children_more">
-
+  {{if(children_length>=1)}}
+  {{each children value index}}
+  <div class="reply-block" id="{{value.id}}">
+    <p class="reply-content">
+      <a href="#" class="reply-user">{{value.name}}</a>:{{value.content}}
+    </p>
+    <div class="interaction">
+      <a href="javascript:;" class="love"><span class="glyphicon glyphicon-fire no_fire"></span> 赞
+        {{if(value.love>0)}}
+        <span class="love_num">{{value.love}}</span>
+        {{else}}
+        <span class="love_num"></span>
+        {{/if}}
+      </a>
+      <span class="reply-time"><span class="fa fa-clock-o"></span> {{value.comment_time}}</span>
+    </div>
+  </div>
+  {{/each}}
+  {{if(children_length<10)}}
+    <div class="reply-block">
+      <p class="no_comment">没有更多评论了</p> 
+    </div>
+  {{else}}
+    <div class="reply-block">
+      <a href="javascript:;" class="reply-more-more">查看更多回复</a> 
+    </div>
+  {{/if}}
+  {{else}}
+  <p class="comment_more">
+  <p class="no_comment">没有更多评论了</p>
+  </p>
+  {{/if}}
+  
 </script>
 
 <script>
@@ -523,6 +234,9 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   $(function(){
     var id = <?php echo $id?>;
     var page = 1;
+    var user_id = <?php echo $user_id?>;
+    // 对话框的标题
+    var title = "警告";
     $.ajax(
       {
         url:'/blog/article/comment_page.php',
@@ -543,7 +257,9 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
         }
     })
     // 查看更多父评论
-    $('.parent_more').click(function(){
+    $(".comment-detail").on("click",".parent_more",function(){
+      // 父评论是在原本的page++;
+      // 子评论是page永远为1
       event.preventDefault();
       page++;
       $(this).parents('.comment_more').remove();
@@ -559,22 +275,32 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
         },
         dataType: 'json',
         success: function(res){
-          console.log(res);
           var html = template('parent_more',{
             parent: res.parent,
             children: res.children,
-            parent_length: res.parent.length,
-            children_length: res.children_length
+            parent_length: res.parent == null ? 0 : res.parent.length,
+            children_length: res.children == null ? 0 : res.children.length 
           });
           $('.comment-detail').append(html);
         }
       })
     })
     // 查看更多子评论
-    $(".reply-more").click(function(){
-      event.preventDefault();
-      id = $(this).parents('.comment-row').attr('id');
-      $(this).remove();
+    // 这里的页面一定不能和前面的页面产生冲突
+    // 每个父评论的子page也不能产生冲突
+    // 如何为动态追加的元素注册事件
+    $(".comment-detail").on("click",".reply-more-more",function(){
+      children_more($(this));
+    })
+    $(".comment-detail").on("click",".reply-more",function(){
+      children_more($(this));
+    })
+    function children_more(element){
+      $comment_row = element.parents('.comment-row');
+      var children_page =  parseInt($comment_row.attr('page')) + 1;
+      $comment_row.attr('page',children_page);
+      id = $comment_row.attr('id');
+      element.remove();
       $.ajax({
         url:'/blog/article/comment_page.php',
         type: 'POST',
@@ -582,54 +308,169 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
         // 这里传出去的是评论的id
         data:{
           comment_id:id,
-          page:page
+          page:children_page
         },
         dataType: 'json',
         success: function(res){
-          console.log(res);
           var html = template('children_more',{
             children: res.children,
-            children_length: res.children_length
+            children_length: res.children == null ? 0 : res.children.length
           });
-          // $('.comment-detail').append(html);
+          $('#'+id).find('.comment-more-detail').append(html).show();  
         }
       })
+    }
+    // 如果成功了我就让用户知道评论发表成功,请等待管理员审核成功后即可展示
+    // 无论是提交哪个评论，提交的是父评论的话，我得知道该文章的id是多少,然后将文章id传给后台，后台才能保存到数据库
+    // 父评论提交需要知道的数据：文章id,用户id,parent_id:null（不用管），content,
+    // 提交子评论的话，我得知道文章id也传过去，父评论的id是就是parent_id,user_id,content,提交成功的话然后审核成功
+    // 这条评论对应的父评论的children_num才增加
+    // 父评论
+    // 提交评论的时候应该先验证下评论内容是否为空
+    $('.parent_comment_submit').on('click', function() {
+      comment_commit($(this),null);
+    })
+    // 回复评论提交
+    $('.comment-detail').on('click', '.reply_btn', function() {
+      parent_id = $(this).parents('.comment-row').attr('id');
+      comment_commit($(this),parent_id);
+    })
+    // element:点击提交的元素
+    function comment_commit(element,parent_id){
+      event.preventDefault();
+      // 获取评论内容，直接根据点击元素查找到父元素在找到文本框提交的内容
+      // 这样看待会有没有机会父评论和子评论用同一个函数
+      // 获取用户id
+      // 对于未登陆用户如何阻止用户去评论呢？
+      // 这里再次确认用户是否登陆
+      // console.log(content == null);
+      // 如果user_id为0,那么该用户未登陆，否则登陆
+      // 如何知道parent_id 
+      // parent_id可以传也可以不传，但是函数如何设置参数可传可不传呢？
+      // 点击按钮以后应该同时将对应的文本域的value清空
+      if(user_id == 0){
+        warn(title,'您还未登陆,请先登录后再发表评论');
+        return;
+      }
+      var content = element.parents('form').find('.form-comment').val();
+      if(!content){
+        warn(title,'评论内容不能为空');
+        return;
+      } 
+      element.parents('form').find('.form-comment').val('');
+      $.ajax({
+        url: '/blog/article/comment_commit.php',
+        type: 'POST',
+        // 传过去的文章id
+        data: {
+          id: id,
+          user_id: user_id,
+          content: content,
+          parent_id: parent_id
+        },
+        dataType: 'json',
+        success: function(res){
+          // 根据返回的信息做处理
+          if(res.danger==true){
+            warn(title,res.message);
+          } else if(res.success==true){
+            title = '恭喜';
+            warn(title,res.message);
+          }
+        }
+      })
+    }
+    function warn(title,content){
+      var d = dialog({
+    	  title: title,
+        content: content,
+        cancel: false,
+	      ok: function () {},
+        quickClose: true
+      });
+      d.show(document.getElementById('option-quickClose'));
+      setTimeout(function () {
+      	d.close().remove();
+      }, 5000);
+    }
+    // 登陆用户才能点赞
+    // 后台处理审核记得更新父评论的子评论数量
+    // 1.更新comment的love
+    // 2.更新praise的赞的详细数据
+    // 点赞用户id:post_id
+    // 评论id:comment_id
+    // 被点赞用户的id:receive_id
+    // 赞的数量如何增加计算
+    $('.comment-detail').on('click','.love',function(){
+      var praise = $(this);
+      // 点赞用户的id
+      if(user_id == 0){
+        warn(title,'您还未登陆,请先登录后再点赞');
+        return;
+      }
+      // console.log($(this).parents('.reply-block').attr('id'));
+      // 如何区分它是位父评论点赞还是为子评论点赞
+      // 如果没有查找到reply-block的父元素，那么就是父评论点赞
+      // 否则就是子评论点赞
+      // console.log($(this).parents('.reply-block'));
+      // 长度为一就是子评论点赞
+      // 子评论
+      var child = praise.parents('.reply-block');
+      // 父评论
+      var parent = praise.parents('.comment-row');
+      if(child.length == 1){
+        var comment_id = child.attr('id');
+      } else if(parent.length == 1) {
+        var comment_id = parent.attr('id');
+      } else {
+        warn(title,'请正常点赞')
+      }
+      var love_num = praise.find('.love_num').text();
+      // 赞的数量》0
+      // 获取原来的点赞数量
+      if(love_num){
+        love_num = parseInt(love_num)
+      } else {
+        // 赞的数量=0
+       love_num = 0
+      }
+      // 还需考虑重复点赞取消点赞等问题
+      // 一个评论一个用户只能点赞一次
+      // 默认最开始的时候一个点赞数量为0,一个用户只能点赞一次，点赞后数字再增加
+      // 赞为0的时候数字都不显示，赞大于等于1的时候再显示赞的数字
+      // 点赞取消赞
+      $.ajax({
+        url:'/blog/article/comment_praise.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          user_id: user_id,
+          comment_id: comment_id
+        },
+        success: function(res){
+          if(res.success == false || res.cancel==false) {
+            warn(title,res.message);
+            // 设置颜色变化
+            // 点赞成功我应该设置.love_num的数量增加,
+            // 并且向评论数据表增加点赞数量,并保存
+          } else if(res.success == true) {
+            love_num = parseInt(love_num) + 1;
+            praise.find('.love_num').text(love_num);
+            praise.addClass('love_fire');
+          } else if(res.cancel == true) {
+            // 取消点赞成功
+            // 如果减一过后的数量小于1不应该填写
+            love_num = parseInt(love_num) - 1;
+            if(love_num > 0){
+              praise.find('.love_num').text(love_num);
+            } else {
+              praise.find('.love_num').text('');
+            }
+            praise.removeClass('love_fire');
+          }
+        }
+      })
+
     })
   })
 </script>
-
-<div class="comment-more-detail">
-              <p class="more-reply">更多回复</p>
-              <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">哄哄</a> 
-                <span class="answer">回复</span> 
-                <a href="#" class="reply-user">团长</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <i nput type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div><div class="comment-more-detail">
-              <p class="more-reply">更多回复</p>
-              <div class="reply-block">
-              <p class="reply-content">
-                <a href="#" class="reply-user">哄哄</a> 
-                <span class="answer">回复</span> 
-                <a href="#" class="reply-user">团长</a>:靠自己呗！
-              </p> -->
-              <!-- 首条回复者的赞数量不管是多少，都加上一个火的标识，并且颜色不一样 -->
-              <!-- <div class="interaction">
-                <a href="javascript:;"><span class="glyphicon glyphicon-fire fire"></span> 赞<span>1</span></a>
-                <a class="reply-switch" href="javascript:;"><span class="fa fa-comment-o"></span> 回复</a>
-                <span class="reply-time">2小时前</span>
-                <form action="" class="reply_form">
-                  <textarea name="reply" class="reply_box"></textarea>
-                  <input type="submit" value="回复" class="btn reply_btn">
-                </form>
-              </div>

@@ -1,0 +1,91 @@
+@import 'common';
+@import 'var';
+@media (min-width:320px) and (max-width:768px) {
+  .blog_main {
+    padding-top:60px;
+    .mainbar {
+      padding-right:0;
+      background-color: #fff;
+      .person_detail {
+        padding: 20px 10px 10px;
+      }
+    }
+  }
+}
+@media (min-width:768px){
+  .blog_main {
+    padding-top:90px;
+    .person_detail {
+      padding-left:240px;
+      padding-right: 40px;
+      background-color: #fff;
+    }
+  }
+}
+body {
+  background-color:#edeff2;
+  .container {
+    padding-left:0;
+    padding-right:0;
+  }
+  .blog_main {
+    padding-left:0;
+    position:relative;
+    .mainbar {
+      width:100%;
+      min-height:550px;
+      position: relative;
+      .person_detail {
+        width: 100%;
+        height: 100%;
+        min-height:550px;
+        .person_message {
+          padding:40px 0;
+          h4 {
+            color: @fontColor;
+            padding-bottom:15px;
+            border-bottom:solid 1px #eaeaea;
+          }
+          .total {
+            margin-top:20px;
+            color: @fontColor;
+          }
+          .table_message {
+            table-layout:fixed;
+            tbody {
+              tr {
+                .message {
+                  overflow: hidden;
+                  a {
+                    display: inline-block;
+                    color: @fontColor;
+                    .email {
+                      display: inline-block;
+                      padding-right: 5px;
+                      color: @helpColor;
+                    }
+                  }
+                }
+                &.read {
+                  .message {
+                    a {
+                      color: #ccc;
+                      .email {
+                        color: #ccc;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+        } 
+      }
+    }
+  }
+  .sidebar {
+    top:90px;
+  }
+}
+  

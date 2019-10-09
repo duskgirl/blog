@@ -49,17 +49,18 @@ function blog_update($sql){
 }
 
 // 获取当前登陆用户信息，如果没有获取到则直接跳转到登录页面
-function blog_get_current_user(){
-  if(empty($_SESSION['current_login_user'])) {
+// 注意避免和前台用户的session发生冲突，所以这里还需添加一个permission的读取?
+function blog_get_admin_user(){
+  if(empty($_SESSION['admin_login_user'])) {
     header('Location:/blog/admin/login.php');
   } else {
-    return $_SESSION['current_login_user'];
+    return $_SESSION['admin_login_user'];
   }
 }
 // 获取当前登陆用户是否是管理员权限
 function is_admin(){
-  blog_get_current_user();
-  if($_SESSION['current_login_user']['permission'] != 1) {
+  blog_get_admin_user();
+  if($_SESSION['admin_login_user']['permission'] != 1) {
     $GLOBALS['err_message'] = '当前用户权限不足！操作失败';
     return false;
   } else {

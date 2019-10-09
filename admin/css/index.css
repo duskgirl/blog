@@ -35,6 +35,16 @@ button {
 img {
   border: 0 none;
 }
+.ellipsis a {
+  display: block;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ellipsis a:hover {
+  color: #17a2b8;
+}
 .container-fluid {
   padding-right: 0;
   padding-left: 0;
@@ -52,6 +62,72 @@ img {
   padding: 40px 0 0 220px;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper {
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+  height: 600px;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller {
+  position: absolute;
+  width: 100%;
+  padding-right: 260px;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li {
+  position: relative;
+  margin-top: 40px;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.comment {
+  width: 33.3333%;
+  height: 100px;
+  line-height: 100px;
+  background-color: #f5f5f5;
+  text-align: center;
+  border-right: solid 20px #fff;
+  border-left: solid 20px #fff;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.comment a {
+  color: #333;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.comment a:hover {
+  color: #17a2b8;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.comment a .wait_check {
+  font-weight: bold;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.user {
+  width: 33.3333%;
+  height: 100px;
+  line-height: 100px;
+  background-color: #f5f5f5;
+  text-align: center;
+  border-right: solid 20px #fff;
+  border-left: solid 20px #fff;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.user a {
+  color: #333;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.user a:hover {
+  color: #17a2b8;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.user a .new_user {
+  font-weight: bold;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li.current_time {
+  width: 33.3333%;
+  height: 100px;
+  line-height: 100px;
+  background-color: #f5f5f5;
+  text-align: center;
+  border-right: solid 20px #fff;
+  border-left: solid 20px #fff;
+}
+.container-fluid .blog_admin_main .blog_admin_center #wrapper #scroller ul li #bar {
+  width: 100%;
+  height: 500px;
+  margin-top: 200px;
 }
 .container-fluid .blog_admin_main .blog_admin_center h3 {
   width: 100%;
@@ -60,22 +136,4 @@ img {
   color: #777;
   text-align: center;
   line-height: 40px;
-}
-.container-fluid .blog_admin_main .blog_admin_center ul {
-  width: 100%;
-  padding-top: 40px;
-}
-.container-fluid .blog_admin_main .blog_admin_center ul li {
-  width: 33.3333%;
-}
-.container-fluid .blog_admin_main .blog_admin_center ul li a {
-  display: block;
-  width: 100%;
-  text-align: center;
-  color: #222;
-  font-size: 16px;
-}
-.container-fluid .blog_admin_main .blog_admin_center ul li a span {
-  color: #fd5c63;
-  font-weight: bold;
 }

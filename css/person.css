@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset 'utf-8';
 html {
   width: 100%;
   height: 100%;
@@ -40,14 +40,20 @@ img {
   }
   .blog_main .mainbar {
     padding-right: 0;
+    background-color: #fff;
+  }
+  .blog_main .mainbar .person_detail {
+    padding: 20px 10px 10px;
   }
 }
 @media (min-width: 768px) {
   .blog_main {
     padding-top: 90px;
   }
-  .blog_main .mainbar {
-    padding-right: 300px;
+  .blog_main .person_detail {
+    padding-left: 240px;
+    padding-right: 40px;
+    background-color: #fff;
   }
 }
 body {
@@ -63,16 +69,13 @@ body .blog_main {
 }
 body .blog_main .mainbar {
   width: 100%;
-  min-height: 750px;
+  min-height: 550px;
   position: relative;
 }
 body .blog_main .mainbar .person_detail {
   width: 100%;
   height: 100%;
-  padding-left: 240px;
-  padding-right: 40px;
-  background-color: #fff;
-  min-height: 750px;
+  min-height: 550px;
 }
 body .blog_main .mainbar .person_detail .person_comment {
   padding: 40px 0;
@@ -81,6 +84,7 @@ body .blog_main .mainbar .person_detail .person_comment h4 {
   color: #51565e;
   padding-bottom: 15px;
   position: relative;
+  border-bottom: solid 1px #eaeaea;
 }
 body .blog_main .mainbar .person_detail .person_comment h4::before {
   content: '';

@@ -1,5 +1,7 @@
 <?php
 require_once './config.php';
+require_once './functions.php';
+blog_visit();
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
   // 设置搜索功能
   $where = '1=1';
