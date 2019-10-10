@@ -1,7 +1,11 @@
+<?php
+require_once './functions.php';
+$user = blog_get_current_user();
+?>
 <div class="person_nav">
   <div class="header hidden-xs">
-    <img src="images/avatar.jpg" alt="" class="avatar">
-    <h3 class="underline">大思考</h3>
+    <img src="<?php echo $user['avatar']?>" alt="" class="avatar">
+    <h3 class="underline"><?php echo $user['name']?></h3>
   </div>
   <!-- 如何保证在大屏设备时是竖着的导航，小屏设备是横着的导航 -->
   <ul>

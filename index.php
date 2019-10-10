@@ -58,6 +58,7 @@ function getIndex(){
   <link rel="stylesheet" href="./css/footer.css">
   <link rel="stylesheet" href="./css/sidebar.css">
   <link rel="stylesheet" href="./css/pagination.css">
+  <link rel="stylesheet" href="./css/public.css">
 </head>
 
 <body>

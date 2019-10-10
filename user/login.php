@@ -34,7 +34,7 @@ function login () {
     exit('连接数据库失败');
   }
   // 查询数据库
-  $query = mysqli_query($conn, "select id,email,name,password,userstats from user where name = '{$username}' limit 1");
+  $query = mysqli_query($conn, "select id,email,name,password,avatar,userstats from user where name = '{$username}' limit 1");
   if (!$query) {
     $GLOBALS['message'] = '登录失败，请重试！';
     return;

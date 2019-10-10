@@ -73,6 +73,10 @@ function save_modify(){
     echo result('save','修改资料失败，请稍后重试',false);
     return;
   }
+  // 同时修改session
+  $session_sql = "select id,email,name,password,avatar,userstats from user where email = '{$email}' limit 1";
+  $user = blog_select_one($session_sql);
+  $_SESSION['current_login_user'] = $user;
   echo result('save','修改资料成功！',true);
 }
 function result($title,$message,$value){

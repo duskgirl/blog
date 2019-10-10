@@ -8,9 +8,6 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
     $_SESSION['url'] = '/blog/person_set.php';
     header('Location: /blog/user/login.php');
   }
-  $email = $user['email'];
-  $sql = "select name,avatar from user where email = '{$email}'";
-  $result = blog_select_one($sql);
 }
 ?>
 <!DOCTYPE html>
@@ -57,7 +54,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
             <div class="form-group">
               <p class="text">用户名 *</p>
               <div class="err_container">
-                <input type="text" class="form-control username" name="username" value="<?php echo $result['name']?>">
+                <input type="text" class="form-control username" name="username" value="<?php echo $user['name']?>">
               </div>
             </div>
             <div class="form-group">
@@ -131,7 +128,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
   <script>
     $(function(){
       // 设置用户头像被选中
-      var avatar_old = "<?php echo $result['avatar']?>";
+      var avatar_old = "<?php echo $user['avatar']?>";
       $('.selected').each(function(){
         if($(this).next().attr('src') == avatar_old) {
           $(this).prop('checked','checked');

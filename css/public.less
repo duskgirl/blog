@@ -25,3 +25,17 @@
     background-color: @helpColor;
   }
 }
+.red_point {
+  position: relative;
+  &::before {
+    content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width:10px;
+      height:10px;
+      // transform: translateY(-50%);
+      background-color: @helpColor;
+      border-radius:50%;
+  }
+}

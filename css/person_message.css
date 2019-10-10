@@ -88,9 +88,19 @@ body .blog_main .mainbar .person_detail .person_message h4 {
 body .blog_main .mainbar .person_detail .person_message .total {
   margin-top: 20px;
   color: #51565e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body .blog_main .mainbar .person_detail .person_message .total .delete_message {
+  background-color: #17a2b8;
+  color: #fff;
 }
 body .blog_main .mainbar .person_detail .person_message .table_message {
   table-layout: fixed;
+}
+body .blog_main .mainbar .person_detail .person_message .table_message thead .check {
+  width: 40px;
 }
 body .blog_main .mainbar .person_detail .person_message .table_message tbody tr .message {
   overflow: hidden;
@@ -104,10 +114,17 @@ body .blog_main .mainbar .person_detail .person_message .table_message tbody tr 
   padding-right: 5px;
   color: #fd5c63;
 }
+body .blog_main .mainbar .person_detail .person_message .table_message tbody tr.no_message {
+  text-align: center;
+  color: #fd5c63;
+}
 body .blog_main .mainbar .person_detail .person_message .table_message tbody tr.read .message a {
   color: #ccc;
 }
 body .blog_main .mainbar .person_detail .person_message .table_message tbody tr.read .message a .email {
+  color: #ccc;
+}
+body .blog_main .mainbar .person_detail .person_message .table_message tbody tr.read .time {
   color: #ccc;
 }
 body .sidebar {
