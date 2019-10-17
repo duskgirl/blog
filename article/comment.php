@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   $id = $_GET['id'];
   // 获取当前页面的url地址存cookie,保证用户登录时还能返回当前页面
@@ -28,9 +28,9 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   <p class="warning">
     <span class="fa fa-exclamation-triangle"></span>
      注册用户登录后才能发表评论，请先
-     <a href="/blog/user/login.php">登录</a>
+     <a href="/user/login.php">登录</a>
      或
-     <a href="/blog/user/register.php">注册</a></p>
+     <a href="/user/register.php">注册</a></p>
   <?php endif?>
   <!-- 登陆以后的话什么都不显示 -->
   <!-- 考虑还是发送ajax请求 -->
@@ -50,10 +50,10 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
   </ul>
  
 </div>
-<script src="/blog/lib/jquery/jquery.min.js"></script>
-<script src="/blog/lib/artDialog-master/dialog.js"></script>
-<script src="/blog/lib/art-template/template-web.js"></script>
-<script src="/blog/article/js/comment.js"></script>
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/artDialog-master/dialog.js"></script>
+<script src="/lib/art-template/template-web.js"></script>
+<script src="/article/js/comment.js"></script>
 <!-- 新建一个评论模板 -->
 <!-- 默认$value拿到的是当前被遍历的那个元素 -->
 <script type="text/x-art-template" id="comment">
@@ -239,7 +239,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
     var title = "警告";
     $.ajax(
       {
-        url:'/blog/article/comment_page.php',
+        url:'/article/comment_page.php',
         type: 'POST',
         async: false,
         data:{
@@ -266,7 +266,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
       // console.log($(this).parents());
       $.ajax(
       {
-        url:'/blog/article/comment_page.php',
+        url:'/article/comment_page.php',
         type: 'POST',
         async: false,
         data:{
@@ -302,7 +302,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
       id = $comment_row.attr('id');
       element.remove();
       $.ajax({
-        url:'/blog/article/comment_page.php',
+        url:'/article/comment_page.php',
         type: 'POST',
         async: false,
         // 这里传出去的是评论的id
@@ -359,7 +359,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
       } 
       element.parents('form').find('.form-comment').val('');
       $.ajax({
-        url: '/blog/article/comment_commit.php',
+        url: '/article/comment_commit.php',
         type: 'POST',
         // 传过去的文章id
         data: {
@@ -440,7 +440,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET['id'])){
       // 赞为0的时候数字都不显示，赞大于等于1的时候再显示赞的数字
       // 点赞取消赞
       $.ajax({
-        url:'/blog/article/comment_praise.php',
+        url:'/article/comment_praise.php',
         type: 'POST',
         dataType: 'json',
         data: {

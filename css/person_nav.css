@@ -34,7 +34,7 @@ button {
 img {
   border: 0 none;
 }
-@media (min-width: 320px) and (max-width: 768px) {
+@media (max-width: 768px) {
   .person_nav {
     position: absolute;
     left: 0;
@@ -54,7 +54,7 @@ img {
     text-align: center;
     color: #51565e;
   }
-  .person_nav ul .active {
+  .person_nav ul .person_nav_item.active {
     border: solid 1px #ccc;
     border-bottom: none;
   }
@@ -103,6 +103,12 @@ img {
   }
   .person_nav ul .person_nav_item a:hover {
     background-color: #333;
+    color: #fff;
+  }
+  .person_nav ul .person_nav_item.active {
+    background-color: #333;
+  }
+  .person_nav ul .person_nav_item.active a {
     color: #fff;
   }
 }

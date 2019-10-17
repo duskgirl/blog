@@ -34,7 +34,7 @@ button {
 img {
   border: 0 none;
 }
-@media (min-width: 320px) and (max-width: 768px) {
+@media (max-width: 768px) {
   .blog_main {
     padding-top: 60px;
   }
@@ -45,6 +45,18 @@ img {
   .blog_main .mainbar .person_detail {
     padding: 20px 10px 10px;
   }
+  .blog_main .mainbar .person_detail #wrapper #scroller ul {
+    padding: 10px;
+  }
+  .blog_main .mainbar .person_detail #wrapper #scroller ul li img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  .blog_main .mainbar .person_detail #wrapper #scroller ul li img.active {
+    width: 60px;
+    height: 60px;
+  }
 }
 @media (min-width: 768px) {
   .blog_main {
@@ -54,6 +66,18 @@ img {
     padding-left: 240px;
     padding-right: 40px;
     background-color: #fff;
+  }
+  .blog_main .person_detail #wrapper #scroller ul {
+    padding: 20px;
+  }
+  .blog_main .person_detail #wrapper #scroller ul li img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  .blog_main .person_detail #wrapper #scroller ul li img.active {
+    width: 120px;
+    height: 120px;
   }
 }
 body {
@@ -83,26 +107,7 @@ body .blog_main .mainbar .person_detail .person_set {
 body .blog_main .mainbar .person_detail .person_set h4 {
   color: #51565e;
   padding-bottom: 15px;
-  position: relative;
   border-bottom: solid 1px #eaeaea;
-}
-body .blog_main .mainbar .person_detail .person_set h4::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #17a2b8;
-}
-body .blog_main .mainbar .person_detail .person_set h4::after {
-  content: '';
-  position: absolute;
-  left: 40px;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #fd5c63;
 }
 body .blog_main .mainbar .person_detail .person_set .modify {
   width: 100%;
@@ -142,14 +147,8 @@ body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper
 }
 body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller ul li img {
   display: block;
-  width: 100px;
-  height: 100px;
   border-radius: 50%;
   margin-top: 5px;
-}
-body .blog_main .mainbar .person_detail .person_set .modify .form-group #wrapper #scroller ul li img.active {
-  width: 120px;
-  height: 120px;
 }
 body .blog_main .mainbar .person_detail .person_set .modify .btn {
   margin-top: 20px;

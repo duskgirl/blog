@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 header('Content-Type: application/json;charset=utf-8');
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   praise();
@@ -32,6 +32,18 @@ function praise(){
   // 如果没有则是点赞行为
 
   // 先查询评论表
+
+
+  // 这里看要不要考虑不要点赞表，直接插入信息表？
+  // 看有没有这个同样的记录有就取消点赞
+  // 没有就增加点赞
+  // 如何保证当该用户给谁点赞了以后页面持续保证是有标记状态
+  // 这里就联合评论表做同样的处理，查询评论的同时查询该用户点赞
+  // 这里还要修改一下是那种缓存处理来增加点赞数量，而不是直接数据库交互那种
+  // 该评论id找到发评论的人，该用户id看是否点赞
+  // 根据
+  
+
   $is_love_sql = "select post_id,comment_id from praise where post_id={$post_id} and comment_id={$comment_id}";
   $is_love_row = blog_select_one($is_love_sql);
   // 有该条记录，则表示用户是取消点赞

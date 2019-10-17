@@ -1,7 +1,9 @@
 <?php
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
+  // 这样可以获取网页的来源地址
+  blog_from();
   getviewnumber();
 }
 function getArticle(){
@@ -9,62 +11,47 @@ function getArticle(){
     exit('缺少必要参数');
   }
   $id = $_GET['id'];
-  $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-  mysqli_set_charset($connect,'utf8');
-  if(!$connect) {
-    exit('连接数据库失败');
-  }
-  // 获取当前页面数据
-  $current_sql = "select a.id,a.header,a.author,a.keywords,a.pubtime,a.content,a.viewnumber,c.name from article as a inner join category as c on a.category_id = c.id where a.id={$id} limit 1";
-  $current_query = mysqli_query($connect,$current_sql);
-  if(!$current_query) {
-    exit('数据查询失败');
-  }
-  $GLOBALS['current_row'] = mysqli_fetch_array($current_query);
+  $current_sql = "select 
+  a.id,
+  a.header,
+  a.author,
+  a.keywords,
+  a.pubtime,
+  a.content,
+  a.viewnumber,
+  c.name 
+  from article as a 
+  inner join category as c 
+  on a.category_id = c.id 
+  where a.id={$id} limit 1";
+  $GLOBALS['current_row'] = blog_select_one($current_sql);
 
   // 获取当前页面的上一条数据
-  $prev_sql = "select id,header,content from article where id=(select min(id) from article where id>{$id})";
-  $prev_query = mysqli_query($connect,$prev_sql);
-  if(!$prev_query) {
-    exit('数据查询失败');
-  }
-  $GLOBALS['prev_row'] = mysqli_fetch_array($prev_query);
+  $prev_sql = "select 
+  id,header,content 
+  from article 
+  where id=(select min(id) from article where id>{$id})";
+  $GLOBALS['prev_row'] = blog_select_one($prev_sql);
   // 获取当前页面的下一条数据
-  $next_sql = "select id,header,content from article where id=(select max(id) from article where id<{$id})";
-  $next_query = mysqli_query($connect,$next_sql);
-  if(!$next_query) {
-    exit('数据查询失败');
-  }
-  $GLOBALS['next_row'] = mysqli_fetch_array($next_query);
+  $next_sql = "select 
+  id,header,content 
+  from article 
+  where id=(select max(id) from article where id<{$id})";
+  $GLOBALS['next_row'] = blog_select_one($next_sql);
 }
 function getviewnumber(){
     if(empty($_GET['id'])){
       exit('缺少必要参数');
     }
     $id = $_GET['id'];
-    // 获取最初被查看的次数
-    $connect = mysqli_connect(DB_HOST,DB_USER,DB_PASS,DB_NAME);
-    if(!$connect) {
-      exit('数据库连接失败');
-    }
-    mysqli_set_charset($connect,'utf8');
-    $sql = "select viewnumber from article where id={$id}";
-    $query = mysqli_query($connect,$sql);
-    if(!$query) {
-      exit('获取查看次数数据失败');
-    }
-    $viewnumber = mysqli_fetch_array($query)['viewnumber'];
+    $sql = "select viewnumber from article where id={$id} limit 1";
+    $viewnumber = blog_select_one($sql)['viewnumber'];
     getArticle();
     $viewnumber += 1;
     $sql_add = "update article set viewnumber = {$viewnumber} where id={$id}";
-    $query = mysqli_query($connect,$sql_add);
-    if(!$query) {
-      exit('更新数据失败');
-    }
-    if(mysqli_affected_rows($connect)<=0){
+    $add_result = blog_update($sql_add);
+    if($add_result<=0){
       $GLOBALS['err_message'] = '更新查看次数数据失败';
-    } else {
-      $GLOBALS['err_message'] = '更新查看次数成功';
     }
   }
 ?>
@@ -73,22 +60,30 @@ function getviewnumber(){
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="renderer" content="webkit" />
+  <meta name="force-renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="apple-mobile-web-app-title" content="大思考博客" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="referrer" content="always">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta name="description" content="大思考博客是一个分享前端开发相关知识的博客网站" />
   <meta name="keywords" content="<?php echo $current_row['keywords']?>">
   <title><?php echo $current_row['header'] ?></title>
-  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="../css/topbar.css">
-  <link rel="stylesheet" href="../css/sidebar.css">
-  <link rel="stylesheet" href="../css/footer.css">
-  <link rel="stylesheet" href="./css/article.css">
-  <link rel="stylesheet" href="./css/comment.css">
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/article/css/article.css">
+  <link rel="stylesheet" href="/article/css/comment.css">
+  <link rel="stylesheet" href="/css/public.css">
 </head>
 
 <body>
 
-  <?php include '../topbar.php'?>
+<?php include $root_path.'/static/topbar.php'?>
 
   <!-- 网站主体内容 -->
   <!-- 左侧：博客标题、博客发表时间、作者、所属分类，文章主图 -->
@@ -96,7 +91,7 @@ function getviewnumber(){
     <section class="mainbar">
       <div class="content">
         <h3><?php echo $current_row['header']?></h3>
-        <p class="time_author">
+        <p class="time_author ellipsis">
           <span class="fa fa-calendar-check-o"></span><span> <?php echo $current_row['pubtime']?> </span>
           <span class="fa fa-user-o"></span><span> <?php echo $current_row['author']?> </span>
           <span class="fa fa-folder-open-o"></span><span> <?php echo $current_row['name']?> </span>
@@ -104,10 +99,10 @@ function getviewnumber(){
         </p>
         <p class="text">In vehicula urna in ex malesuada malesuada. Curabitur ut tellus vehicula turpis semper consequat. Phasellus tristique odio enim, et molestie risus volutpat a. Phasellus ex enim, varius sit amet eleifend laoreet, efficitur ac lorem. Donec nibh
           elit, varius sed vulputate vitae, auctor rutrum lacus.</p>
-        <img src="./images/banner_1.jpg" alt="">
+        <img src="/article/img/banner_1.jpg" alt="">
         <p class="text">天生的美女，从小到大就长得漂亮，几乎是在别人的称赞中长大的。尤其是在大了的时候，身边的追求者更是一个接着一个，只不过很可惜，你暂时并不会考虑感情上的问题。美人美在骨，你就是这种类型，所以你的美并不会随着时间的流逝而消散。相反，年纪越大，你的美就变得更加有韵味。</p>
         <p class="text">天生的美女，从小到大就长得漂亮，几乎是在别人的称赞中长大的。尤其是在大了的时候，身边的追求者更是一个接着一个，只不过很可惜，你暂时并不会考虑感情上的问题。美人美在骨，你就是这种类型，所以你的美并不会随着时间的流逝而消散。相反，年纪越大，你的美就变得更加有韵味。</p>
-        <img src="./images/banner_2.jpg" alt="">
+        <img src="/article/img/banner_2.jpg" alt="">
         <p class="text">In vehicula urna in ex malesuada malesuada. Curabitur ut tellus vehicula turpis semper consequat. Phasellus tristique odio enim, et molestie risus volutpat a. Phasellus ex enim, varius sit amet eleifend laoreet, efficitur ac lorem. Donec nibh
           elit, varius sed vulputate vitae, auctor rutrum lacus.
         </p>
@@ -136,15 +131,16 @@ function getviewnumber(){
         </a>
         <?php endif?>
       </div>
-      <?php include './comment.php'?>
+      <?php include  $root_path.'/article/comment.php'?>
     </section>
-    <?php include '../sidebar.php'?>
+    <?php include $root_path.'/static/sidebar.php'?>
   </main>
 
   <!-- 脚本： -->
-  <?php include '../footer.php'?>
-  <script src="../lib/jquery/jquery.min.js"></script>
-  <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
+  <?php include $root_path.'/static/footer.php'?>
+  <script src="/lib/jquery/jquery.min.js"></script>
+  <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/js/topbar.js"></script>
 </body>
 
 </html>

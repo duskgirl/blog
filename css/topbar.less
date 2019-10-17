@@ -55,7 +55,7 @@ body {
               padding:150px 0 40px 0;
               text-align:center;
               color: #f9f9f9;
-              background-color: #222;
+              background-color: @mainColor;
               margin:0;
               letter-spacing: 0.1em;
             }
@@ -74,16 +74,6 @@ body {
 
           }
         }
-
-        // .navbar-brand {
-        //   margin-left:30px;
-        //   color: @mainColor;
-        //   letter-spacing: 0.3em;
-        //   font-size:25px;
-        //   font-weight: 600;
-        //   text-shadow: 0 0 3px #999;
-        //   vertical-align: middle;
-        // }
         .person_center {
           position: absolute;
           right:40px;
@@ -121,7 +111,7 @@ body {
               width:150px;
               right:0;
               padding:20px 0;
-              background:url('../images/person_menu.png') no-repeat;
+              background:url('/img/person_menu.png') no-repeat;
               background-size:150px 120px;
               li {
                 padding:10px;
@@ -148,8 +138,6 @@ body {
                   border-bottom:none;
                 }
                 a {
-                  // display: inline-block;
-                  // width:100%;
                   color:#111;
                   &:hover {
                     color:@mainColor;

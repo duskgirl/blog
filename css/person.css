@@ -34,7 +34,7 @@ button {
 img {
   border: 0 none;
 }
-@media (min-width: 320px) and (max-width: 768px) {
+@media (max-width: 768px) {
   .blog_main {
     padding-top: 60px;
   }
@@ -83,26 +83,7 @@ body .blog_main .mainbar .person_detail .person_comment {
 body .blog_main .mainbar .person_detail .person_comment h4 {
   color: #51565e;
   padding-bottom: 15px;
-  position: relative;
   border-bottom: solid 1px #eaeaea;
-}
-body .blog_main .mainbar .person_detail .person_comment h4::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #17a2b8;
-}
-body .blog_main .mainbar .person_detail .person_comment h4::after {
-  content: '';
-  position: absolute;
-  left: 40px;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #fd5c63;
 }
 body .blog_main .mainbar .person_detail .person_comment .comment_block {
   border-bottom: solid 1px #f0f0f0;

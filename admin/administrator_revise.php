@@ -1,8 +1,8 @@
 <?php
 // 添加管理员
 // 添加后提交数据
-require_once './config.php';
-require_once './functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/admin/functions.php');
 blog_get_admin_user();
 // 修改管理员账户渲染表单
 // 数据提交修改数据
@@ -66,7 +66,7 @@ function revise(){
     $permission = $_POST['permission'];
     // 如果所有的信息和原来的一样就保持不变，直接跳转到管理员管理页面
     if($name == $_SESSION['revise_user']['name'] && $password ==  $_SESSION['revise_user']['password'] && $permission ==  $_SESSION['revise_user']['permission']){
-      header('Location:/blog/admin/administrator.php');
+      header('Location:/admin/administrator.php');
     }
     $sql = "update adminuser set name='{$name}',password='{$password}',permission={$permission} where id={$id}";
     $result = blog_update($sql);
@@ -75,7 +75,7 @@ function revise(){
     } else {
       $GLOBALS['success_message'] = '修改管理员信息成功!';
       unset($_SESSION['revise_user']);
-      header('Location:/blog/admin/administrator.php');
+      header('Location:/admin/administrator.php');
     }
 
   }
@@ -85,13 +85,21 @@ function revise(){
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <meta name="renderer" content="webkit" />
+  <meta name="force-renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="apple-mobile-web-app-title" content="大思考博客" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="referrer" content="always">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <title>大思考-后台管理员账户修改</title>
+  <meta name="keywords" content="大思考,大思考博客,前端开发,前端开发博客" />
+  <meta name="description" content="大思考博客是一个分享前端开发相关知识的博客网站" />
   <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="./css/administrator_revise.css">
@@ -158,8 +166,8 @@ function revise(){
     <?php endif?>
 
   </div>
-  <script src="./lib/jquery/jquery.min.js"></script>
-  <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/admin/lib/jquery/jquery.min.js"></script>
+  <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
 
 </body>
 

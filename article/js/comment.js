@@ -37,4 +37,14 @@ $(function() {
   // 验证用户是否登陆
   // 填写评论内容或者是提交评论之前，还有提交评论之后都要获取该用户是否登陆
   // 发表评论的按钮用户登录后才能让其可点击，否则是不可点击的
+  $('.form-comment').on('focus', function() {
+    if ($(this).val() == '来说几句吧....') {
+      $(this).val('');
+    }
+  })
+  $('.form-comment').on('blur', function() {
+    if ($(this).val() == '') {
+      $(this).val('来说几句吧....');
+    }
+  })
 })

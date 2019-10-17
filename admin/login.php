@@ -1,7 +1,6 @@
 <?php
-// 载入配置文件
-require_once './config.php';
-require_once './functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/admin/functions.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   login();
 }
@@ -20,21 +19,8 @@ function login () {
   }
   $username = $_POST['username'];
   $password = $_POST['password'];
-
-  // 当客户端提交过来的完整的表单信息就应该开始对其进行数据校验
-  // 连接数据库
-  $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-  if (!$conn) {
-    exit('连接数据库失败');
-  }
-  // 查询数据库
-  $query = mysqli_query($conn, "select id,name,password,permission from adminuser where name = '{$username}' limit 1");
-  if (!$query) {
-    $GLOBALS['message'] = '登录失败，请重试！';
-    return;
-  }
-  // 获取登录用户
-  $user = mysqli_fetch_assoc($query);
+  $sql = "select id,name,password,permission from adminuser where name = '{$username}' limit 1";
+  $user = blog_select_one($sql);
   if (!$user) {
     // 用户不存在
     $GLOBALS['message'] = '当前管理员账户不存在';
@@ -53,7 +39,7 @@ function login () {
   $_SESSION['admin_login_user'] = $user;
   $_SESSION['admin_login_user_id'] = $user['id'];
   // 一切OK 可以跳转
-  header('Location: /blog/admin/index.php');
+  header('Location: /admin/index.php');
 }
 // 退出登陆功能
 if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'logout'){
@@ -70,10 +56,10 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['acti
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>大思考-注册，登陆</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="lib/bootstrapvalidator/css/bootstrapValidator.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="/admin/lib/font-awesome/css/font-awesome.min.css">
+    <link href="/admin/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/admin/lib/bootstrapvalidator/css/bootstrapValidator.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/admin/css/login.css">
     <link rel="shortcut icon" href="favicon.ico">
     <!--[if lt IE 9]>
     <script src="lib/html5shiv/html5shiv.min.js"></script>
@@ -115,101 +101,16 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['acti
 
 
     <!-- Javascript -->
-    <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/admin/lib/jquery/jquery.min.js"></script>
+    <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
     <!-- 轮播图插件 -->
     <!-- <script src="lib/backstretch/jquery.backstretch.min.js"></script> -->
     <!--[if lt IE 10]>
     <script src="lib/placeholder/jquery.placeholder.min.js"></script>
   <![endif]-->
 
-  <script src="./lib/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
-  <script>
-    // 初步检验表单内容
-    // 登录页面忘记密码
-    // 1.初步检测用户名是否存在
-    // 2.初步检测输入密码是否和当前用户匹配
-    $(function(){
-      $('.login').bootstrapValidator({
-        message: 'This value is not valid',
-          feedbackIcons: {
-        　　valid: 'glyphicon glyphicon-ok',
-        　　invalid: 'glyphicon glyphicon-remove',
-        　　validating: 'glyphicon glyphicon-refresh'
-          },
-          fields: {
-            username: {
-            verbose:false,
-            threshold: 2,
-            message: '用户名验证失败',
-            validators: {
-              notEmpty: {
-                message: '用户名不能为空'
-              },
-              stringLength:{
-                min: 2,
-                max: 10,
-                message: '用户名长度必须在2到10位之间'
-              },
-              regxp: {
-                regexp: /^[a-zA-Z0-9_]+$/,
-                message: '用户名只能包含大写，小写，数字和下划线'
-              },
-              remote: {
-                // 检测当前用户是否注册
-                url: '/blog/admin/checkUnique.php',
-                // 提示消息
-                message: '当前管理员账户不存在',
-                delay: 2000,
-                type: 'POST',
-                data: {
-                  // 这个数据是默认会传递的
-                  // username: function(){
-                  //   return $.trim($('.login').find('.form-username').val())
-                  // },
-                  unique: function(){
-                    return false
-                  }
-                }
-              }
-            }
-          },
-          password: {
-            verbose:false,
-            message: '密码验证失败',
-            threshold: 2,
-            validators: {
-              notEmpty: {
-                message: '密码不能为空',
-              },
-              stringLength:{
-                min: 6,
-                max: 10,
-                message: '密码长度必须在6到10位之间'
-              },
-              regxp: {
-                regexp: /^[a-zA-Z0-9_]+$/,
-                message: '密码只能包含大写，小写，数字和下划线'
-              },
-              remote: {
-                // 检测当前用户是否注册
-                url: '/blog/admin/checkUnique.php',
-                // 提示消息
-                message: '输入密码与当前用户不匹配，请重新输入',
-                delay: 2000,
-                type: 'POST',
-                data: {
-                  username: function(){
-                    return $.trim($('.login').find('.form-username').val())
-                  }
-                }
-              }
-            }
-          }
-        }
-      })
-    })
-  </script>
+  <script src="/admin/lib/bootstrapvalidator/js/bootstrapValidator.min.js"></script>
+  <script src="/admin/js/login.js"></script>
 
   </body>
 

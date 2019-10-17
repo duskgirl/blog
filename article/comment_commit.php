@@ -4,8 +4,8 @@
 // content: content,:评论内容
 // parent_id: parent_id：父评论id
 header('Content-Type: application/json;charset=utf-8');
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
   comment_commit();
 }

@@ -10,3 +10,5 @@ define('DB_PASS','123456');
 
 // 数据库名称
 define('DB_NAME','blog');
+
+define('ROOT','http://127.0.0.1:3000');

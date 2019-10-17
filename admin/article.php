@@ -1,6 +1,6 @@
 ﻿<?PHP
-require_once './config.php';
-require_once './functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/admin/functions.php');
 blog_get_admin_user();
 // 获取文章分类
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -11,28 +11,8 @@ function getCategory(){
   blog_select_all($sql);
 }
 
-
-
-// 处理直接添加文章的页面
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // var_dump($_POST);
-  // var_dump($_POST['content']);
-  // date_default_timezone_set('PRC');
-  // var_dump(Date('Y-m-d H:i:s'));
-  // $time = time();
-  // var_dump(Date('Y-m-d H:i:s',$time));
-  // $url =  __FILE__;
-  // echo $_SERVER['HTTP_HOST'];
-  // 将文件的header和keywords和content(就是文件的地址)保存到数据库中
-  // 根据首页需要文章的标题,发表时间,作者名称，分类名称,缩略图,简介
-  // 文章页面需求：标题,发表时间,作者名称，分类名称，关键词
-  // 文章页头需求：页头的title,页头的关键词(就直接利用文章本身的标题和文章本身的关键词)
-  // 接收数据并校验、持久化、响应
-  // var_dump($data);
-  // 生成html文件
-  // file_put_contents($path,$data);
   getArticle();
- 
 }
 function getArticle(){
   if(is_admin()){
@@ -72,14 +52,14 @@ function getArticle(){
   // 获取当前时间戳为文件名
   date_default_timezone_set('PRC');
   $time = time();
-  $path = $_SERVER['DOCUMENT_ROOT'].'/blog/article/';
+  $path = $_SERVER['DOCUMENT_ROOT'].'/article/';
   $path = $path.$time.'.php';
-  $top = file_get_contents('article-top.php');
-  $bottom = file_get_contents('article-bottom.php');
+  $top = file_get_contents('article_top.php');
+  $bottom = file_get_contents('article_bottom.php');
   $data = $top.$content.$bottom;
   file_put_contents($path,$data);
   // 数据库保存的路径是网址的根路径下的地址
-  $content_path = '/blog/article/'.$time.'.php';
+  $content_path = '/article/'.$time.'.php';
   // 根据首页需要文章的标题($header),发表时间,作者名称，分类名称,缩略图,简介
   // 文章页面需求：标题,发表时间,作者名称，分类名称，关键词
   // 文章页头需求：页头的title,页头的关键词(就直接利用文章本身的标题和文章本身的关键词)
@@ -94,23 +74,30 @@ function getArticle(){
   $GLOBALS['success_message'] = '文章添加成功';
   // 获取数据执行结果 
   // 响应跳转
-  header('location:/blog/admin/article.mana.php');
+  header('location:/admin/article_mana.php');
   }
 }
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./lib/simplemde/simplemde.min.css">
-  <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="./css/article.css">
+  <meta name="renderer" content="webkit" />
+  <meta name="force-renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="apple-mobile-web-app-title" content="大思考博客" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="referrer" content="always">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <title>大思考-后台添加文章</title>
+  <meta name="keywords" content="大思考,大思考博客,前端开发,前端开发博客" />
+  <meta name="description" content="大思考博客是一个分享前端开发相关知识的博客网站" />
+  <link rel="stylesheet" href="/admin/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/admin/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/admin/css/article.css">
 
 
 </head>
@@ -153,18 +140,18 @@ function getArticle(){
       <input type="text" class="form-control" maxlength="50" placeholder="请输入文章缩略图" name="thumbnail">
       <textarea id="simplemde" name="content" >
         '<p class="text">In vehicula urna </p>
-         <img src="./images/banner_1.jpg" alt="">
+         <img src="/article/banner_1.jpg" alt="">
          <p class="text">天生的美女，从小到大就</p>
          <p class="text">天生的美女，从小到大就</p>
-         <img src="./images/banner_2.jpg" alt="">
+         <img src="/article/banner_2.jpg" alt="">
          <p class="text">In vehicula urna</p>'
       </textarea>
       <input type="submit" value="提交" class="btn" id="btn">
     </form>
 
   </div>
-  <script src="./lib/jquery/jquery.min.js"></script>
-  <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/admin/lib/jquery/jquery.min.js"></script>
+  <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>

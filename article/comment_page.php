@@ -1,8 +1,8 @@
 
 <?php
 header('Content-Type: application/json;charset=utf-8');
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 if((empty($_POST['id'])||empty($_POST['page']))&&(empty($_POST['comment_id'])||empty($_POST['page']))){
   exit('缺少必要的参数!');
 }

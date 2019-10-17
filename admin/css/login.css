@@ -35,12 +35,22 @@ button {
 img {
   border: 0 none;
 }
+.ellipsis a {
+  display: block;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ellipsis a:hover {
+  color: #17a2b8;
+}
 .blog_admin_login {
   box-sizing: border-box;
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url(../images/register_bg.jpg) no-repeat;
+  background: url(../img/register_bg.jpg) no-repeat;
   background-position: center center;
   background-clip: content-box;
   background-origin: content-box;

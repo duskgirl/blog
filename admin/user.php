@@ -1,6 +1,6 @@
 <?php
-require_once 'config.php';
-require_once 'functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/admin/functions.php');
 blog_get_admin_user();
 if($_SERVER['REQUEST_METHOD'] === 'GET') {
   // 删除操作
@@ -21,30 +21,27 @@ if($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
     $search_value = $search_result;
   }
-  require_once 'getuserpage.php';
+  $total_sql = $sql = "select count('total') as totalRow from comment where content like '%{$search_value}%'";
+  blog_get_page($total_sql);
   getuser();
 } 
 function getuser(){
-  global $per_list,$skip,$search_value;
-  $sql = "select 
-  id,
-  name,
-  email,
-  avatar,
-  userstats 
-  from user 
-  where name like '%{$search_value}%'
-  order by id desc
-  limit {$skip},{$per_list}";
-  $result = blog_select_all($sql);
-  if(!$result) {
-    $GLOBALS['err_message'] = '查询数据失败';
-  }
-  foreach($result as $key => $value){
-    if(empty($value['totalRow'])) {
-      $GLOBALS['array_result'][] = $value;
-    }
-  }
+  global $search_value;
+  if($GLOBALS['total']>0){
+    $skip = $GLOBALS['skip'];
+    $per_list =  $GLOBALS['$per_list'];
+    $sql = "select 
+    id,
+    name,
+    email,
+    avatar,
+    userstats 
+    from user 
+    where name like '%{$search_value}%'
+    order by id desc
+    limit {$skip},{$per_list}";
+    $GLOBALS['array_result'] = blog_select_all($sql);
+  } 
 }
 function delete_user(){
   // 删除管理员
@@ -69,29 +66,41 @@ function delete_user(){
 
 <!DOCTYPE html>
 <html>
-<head lang="en">
+<head>
   <meta charset="UTF-8">
-  <title>后台管理系统-文章管理</title>
-  <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="./css/topbar.css">
-  <link rel="stylesheet" href="./css/sidebar.css">
-  <link rel="stylesheet" href="./css/pagination.css">
-  <link rel="stylesheet" href="./css/user.css">
+  <meta name="renderer" content="webkit" />
+  <meta name="force-renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="apple-mobile-web-app-title" content="大思考博客" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="referrer" content="always">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <title>大思考-后台用户管理</title>
+  <meta name="keywords" content="大思考,大思考博客,前端开发,前端开发博客" />
+  <meta name="description" content="大思考博客是一个分享前端开发相关知识的博客网站" />
+  <link rel="stylesheet" href="/admin/lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/admin/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/admin/css/article-mana.css">
+  <link rel="stylesheet" href="/admin/css/topbar.css">
+  <link rel="stylesheet" href="/admin/css/sidebar.css">
+  <link rel="stylesheet" href="/admin/css/pagination.css">
+  <link rel="stylesheet" href="/admin/css/user.css">
+  <link rel="stylesheet" href="/admin/css/public.css">
   
 </head>
 
 <body>
   <!-- 顶部通栏 bolg的logo+后台管理系统左侧 右侧搜索框倒三角符号显示登陆者账户名以及退出 -->
   <div class="container-fluid">
-    <?php include './topbar.php'?>
+  <?php include $root_path.'/admin/static/topbar.php'?>
     <div class="blog_admin_main">
     <?php $current_nav='user';?>
-      <?php include './sidebar.php'?>
+    <?php include $root_path.'/admin/static/sidebar.php'?>
     <section class="blog_admin_center">
       <ol class="breadcrumb">
-        <li><a href="/blog/admin/index.php">首页</a></li>
-        <li class="active"><a href="/blog/admin/user.php">用户管理</a></li>
+        <li><a href="/admin/index.php">首页</a></li>
+        <li class="active"><a href="/admin/user.php">用户管理</a></li>
       </ol>
       <?php if(isset($err_message)): ?>
       <div class="alert alert-danger prompt_message  alert-dismissible">
@@ -138,19 +147,19 @@ function delete_user(){
             <?php endif?>
             <?php elseif($total==0):?>
             <tr class="nofound">
-              <td colspan="5">抱歉！没有找到该用户!</td>
+              <td colspan="5">抱歉！没有找到相关用户!</td>
             </tr>
             <?php endif?>
           </tbody>
         </thead>
       </table>
-      <?php include './pagination.php'?>
+      <?php include $root_path.'/admin/static/pagination.php'?>
     </section>
     </div>
   </div>
 
-  <script src="./lib/jquery/jquery.min.js"></script>
-  <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/admin/lib/jquery/jquery.min.js"></script>
+  <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>

@@ -1,20 +1,26 @@
 <?php
-require_once './config.php';
-require_once './functions.php';
+ $root_path = $_SERVER['DOCUMENT_ROOT'];
+ require_once($root_path.'/functions.php');
 $user = blog_get_current_user();
 if($_SERVER['REQUEST_METHOD'] === 'GET'){
   // 必须先注册登陆才能进去
   if($user == null){
-    $_SESSION['url'] = '/blog/person_message.php';
-    header('Location: /blog/user/login.php');
+    $_SESSION['url'] = '/person_message.php';
+    header('Location: /user/login.php');
   }
   // 设置搜索功能
-  $where = '1=1';
+  $user_id = $user['id'];
+  $where = "receive_id={$user_id}";
   $search = '';
-  require_once './get_message_page.php';
   if(!empty($_GET['id'])){
     delete_message();
   }
+  $total_sql = "select 
+  count('id') as totalRow 
+  from message as m 
+  inner join user as u on m.send_id = u.id
+  where {$where}";
+  blog_get_page($total_sql);
   get_person_message();
 }
 function delete_message(){
@@ -35,47 +41,54 @@ function get_person_message(){
   // 连接数据库；
   // 查询数据；
   // 响应
-  global $skip,$every,$where,$user;
-  $user_id = $user['id'];
-  $total_sql = "select count(id) as total from message where receive_id={$user_id}";
-  $total_result = blog_select_one($total_sql);
-  $GLOBALS['total'] = $total_result['total'];
+  global $where;
   if($GLOBALS['total']>0){
     // 默认显示六条数据
+    $skip = $GLOBALS['skip'];
+    $per_list =  $GLOBALS['$per_list'];
     $sql = "select id,
     message,
     send_time,
     read_status 
     from message 
-    where receive_id={$user_id} order by id desc limit {$skip},{$every}";
+    where $where order by id desc limit {$skip},{$per_list}";
     $GLOBALS['result'] = blog_select_all($sql);
   }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>大思考个人中心</title>
-  <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="./css/topbar.css">
-  <link rel="stylesheet" href="./css/sidebar.css">
-  <link rel="stylesheet" href="./css/footer.css">
-  <link rel="stylesheet" href="./css/person_nav.css">
-  <link rel="stylesheet" href="./css/person_message.css">
-  <link rel="stylesheet" href="./css/public.css">
-  <link rel="stylesheet" href="./css/pagination.css">
+  <meta name="renderer" content="webkit" />
+  <meta name="force-renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="apple-mobile-web-app-title" content="大思考博客" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="referrer" content="always">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <title>大思考-个人中心</title>
+  <meta name="keywords" content="大思考,大思考博客,前端开发,前端开发博客" />
+  <meta name="description" content="大思考博客是一个分享前端开发相关知识的博客网站" />
+  <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/topbar.css">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/footer.css">
+  <link rel="stylesheet" href="/css/person_nav.css">
+  <link rel="stylesheet" href="/css/person_message.css">
+  <link rel="stylesheet" href="/css/public.css">
+  <link rel="stylesheet" href="/css/pagination.css">
 </head>
 
 <body>
-  <?php include 'topbar.php'?>
+<?php include $root_path.'/static/topbar.php'?>
   <main class="blog_main container">
     <section class="mainbar">
-      <?php include 'person_nav.php'?>
+    <?php $current_nav = 'person_message'?>
+    <?php include $root_path.'/static/person_nav.php'?>
       <div class="person_detail" id="person">        
         <!-- 我的评论页面 -->
         <div class="person_message">
@@ -128,7 +141,17 @@ function get_person_message(){
                 <!-- 这里就需要重新修改以前评论的管理 -->
                 <!-- 评论审核消息： 在后台审核通过、或者删除消息的时候将在message插入数据 -->
                 <!-- 评论被回复消息: 1.审核通过该评论以后，看有没有父parent_id，有则需要message插入数据 -->
+
+                <!-- 这个还未处理 -->
                 <!-- 评论被点赞消息：1.当点赞一发生，就应该给message插入数据 -->
+                <!-- 解决一下require_once 或者require里面的绝对路径问题 -->
+                <!-- 每个页面都加上url session以保证用户登录后还能再返回页面去 -->
+                <!-- 为了保证一直数字的一致性，还是得将message表添加一个comment_id,
+                同时后台审核的时候不能直接删除评论？可以直接删除,删除的comment_id在message表中为null,
+                其它就有comment_id -->
+                <!-- 审核处理的时候还需要将评论id插入 -->
+
+
 
 
                 <!-- 数据库表设计：id,send(发送消息的人，评论审核通过
@@ -143,15 +166,16 @@ function get_person_message(){
             </tbody>
           </table>
       </div>
-      <?php include './person_message_page.php'?>
+      <?php include $root_path.'/static/pagination.php'?>
     </section>
   </main>
-  <?php include 'footer.php'?>
-  <script src="./lib/jquery/jquery.min.js"></script>
-  <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/blog/lib/artDialog-master/dialog.js"></script>
-  <script src="/blog/lib/art-template/template-web.js"></script>
-  <script src="/blog/js/person_message.js"></script>
+  <?php include $root_path.'/static/footer.php'?>
+  <script src="/lib/jquery/jquery.min.js"></script>
+  <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/lib/artDialog-master/dialog.js"></script>
+  <script src="/lib/art-template/template-web.js"></script>
+  <script src="/js/person_message.js"></script>
+  <script src="/js/topbar.js"></script>
   <script>
   $(function(){
     var warn_message = <?php echo !empty($warn_message) ? 1 : 2 ?>;

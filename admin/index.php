@@ -1,6 +1,6 @@
 <?php
-require_once './config.php';
-require_once './functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/admin/functions.php');
 blog_get_admin_user();
 // 设置时间
 date_default_timezone_set('PRC');
@@ -40,24 +40,34 @@ function total(){
 <!DOCTYPE html>
 <html>
 
-<head lang="en">
+<head>
   <meta charset="UTF-8">
-  <title>后台管理系统-首页</title>
-  <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="./css/topbar.css">
-  <link rel="stylesheet" href="./css/sidebar.css">
-  <link rel="stylesheet" href="./css/index.css">
+  <meta name="renderer" content="webkit" />
+  <meta name="force-renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge chrome=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no" />
+  <meta name="apple-mobile-web-app-title" content="大思考博客" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="referrer" content="always">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <title>大思考-后台首页</title>
+  <meta name="keywords" content="大思考,大思考博客,前端开发,前端开发博客" />
+  <meta name="description" content="大思考博客是一个分享前端开发相关知识的博客网站" />
+  <link rel="stylesheet" href="/admin/lib/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/admin/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/admin/css/topbar.css">
+  <link rel="stylesheet" href="/admin/css/sidebar.css">
+  <link rel="stylesheet" href="/admin/css/index.css">
 </head>
 
 <body>
   <!-- 顶部通栏 bolg的logo+后台管理系统左侧 右侧搜索框倒三角符号显示登陆者账户名以及退出 -->
   <div class="container-fluid">
-    <?php include './topbar.php'?>
+    <?php include $root_path.'/admin/static/topbar.php'?>
     <div class="blog_admin_main">
       <!-- 以下是左边侧栏 -->
       <?php $current_nav='index';?>
-      <?php include './sidebar.php'?>
+      <?php include $root_path.'/admin/static/sidebar.php'?>
       <section class="blog_admin_center">
         <!-- 区域滚动 -->
         <div id="wrapper">
@@ -68,7 +78,7 @@ function total(){
               <?php foreach($result as $key => $item):?>
               <?php if(isset($item['wait_check'])):?>
               <li class="comment pull-left">
-                <a href="/blog/admin/comment.php?audit_status=0">
+                <a href="/admin/comment.php?audit_status=0">
                 <span class="fa fa-comment-o"></span>待审核评论：
                 <span class="wait_check"><?php echo $item['wait_check']?></span>
                 </a>
@@ -76,7 +86,7 @@ function total(){
               <?php endif?>
               <?php if(isset($item['new_register'])):?>
               <li class="user pull-left">
-                <a href="/blog/admin/user.php?new_register=week">
+                <a href="/admin/user.php?new_register=week">
                   <span class="fa fa-user-plus"></span>新注册用户：
                   <span class="new_user"><?php echo $item['new_register']?></span>
                 </a>
@@ -97,13 +107,13 @@ function total(){
       </section>
     </div>
   </div>
-  <script src="./lib/jquery/jquery.min.js"></script>
-  <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/admin/lib/jquery/jquery.min.js"></script>
+  <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
   
-  <script src="./lib/iscroll/iscroll-probe.js"></script>
+  <script src="/admin/lib/iscroll/iscroll-probe.js"></script>
   <!-- 图表 -->
-  <script src="./lib/echarts/dist/echarts.min.js"></script>
-  <script src="./js/index.js"></script>
+  <script src="/admin/lib/echarts/dist/echarts.min.js"></script>
+  <script src="/admin/js/index.js"></script>
 </body>
 
 </html>

@@ -210,8 +210,8 @@
 header('Content-Type: application/json;charset=utf-8');
 // 获取
 
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 if(empty($_GET['id']) || empty($_GET['user_id']) || empty($_GET['content'])){
   exit('缺少必要的参数');
 }

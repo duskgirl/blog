@@ -13,7 +13,7 @@ $(function() {
     var read = $(this).parents('tr');
     var id = read.attr('id');
     $.ajax({
-      url: '/blog/message_detail.php',
+      url: '/api/message_detail.php',
       type: 'POST',
       dataType: 'json',
       data: {
@@ -40,13 +40,13 @@ $(function() {
             title = '抱歉';
             content = "您的评论: " + result.comment_content + ' 未通过管理员审核';
           }
-          // 点赞
-          if (result.type == 3) {
-            title = '通知';
-            content = result.name + ' 赞了您的评论: ' + result.comment_content;
-          }
+          // 不要点赞
+          // if (result.type == 3) {
+          //   title = '通知';
+          //   content = result.name + ' 赞了您的评论: ' + result.comment_content;
+          // }
           // 回复
-          if (result.type == 4) {
+          if (result.type == 3) {
             title = '通知';
             content = result.name + ' 回复了您的评论: ' + result.comment_content;
           }

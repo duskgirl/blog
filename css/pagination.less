@@ -1,12 +1,20 @@
 @import 'var';
+@media (max-width:768px) {
+  .nav_pagination {
+    height:54px;
+    padding: 10px;
+  }
+}
+@media (min-width:768px) {
+  .nav_pagination {
+    height:114px;
+    padding:40px;
+  }
+}
 .nav_pagination {
-  height:34px;
   background-color: #fff;
-  margin:40px 0 0 0;
-  padding:40px;
   .pagination {
-    margin-top:-15px;
-    height:34px;
+    margin:0;
     li {
       a {
         color:#444;

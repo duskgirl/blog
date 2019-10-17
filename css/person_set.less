@@ -1,6 +1,6 @@
 @import 'common';
 @import 'var';
-@media (min-width:320px) and (max-width:768px) {
+@media (max-width:768px) {
   .blog_main {
     padding-top:60px;
     .mainbar {
@@ -8,6 +8,24 @@
       background-color: #fff;
       .person_detail {
         padding: 20px 10px 10px;
+        #wrapper {
+          #scroller {
+            ul {
+              padding:10px;
+              li {
+                img {
+                  width:50px;
+                  height:50px;
+                  border-radius:50%;
+                  &.active {
+                    width:60px;
+                    height:60px;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -19,6 +37,24 @@
       padding-left:240px;
       padding-right: 40px;
       background-color: #fff;
+      #wrapper {
+        #scroller {
+          ul {
+            padding:20px;
+            li {
+              img {
+                width:100px;
+                height:100px;
+                border-radius:50%;
+                &.active {
+                  width:120px;
+                  height:120px;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -44,26 +80,7 @@ body {
           h4 {
             color: @fontColor;
             padding-bottom:15px;
-            position: relative;
             border-bottom:solid 1px #eaeaea;
-            &::before {
-              content: '';
-              position: absolute;
-              left:0;
-              bottom:0;
-              width:40px;
-              height:2px;
-              background-color: @mainColor;
-            }
-            &::after {
-              content: '';
-              position: absolute;
-              left:40px;
-              bottom:0;
-              width:40px;
-              height:2px;
-              background-color: @helpColor;
-            }
           }
           .modify {
             width:100%;
@@ -97,14 +114,8 @@ body {
                       padding:10px;
                       img {
                         display: block;
-                        width:100px;
-                        height:100px;
                         border-radius:50%;
                         margin-top:5px;
-                        &.active {
-                          width:120px;
-                          height:120px;
-                        }
                       }
                     }
                   }

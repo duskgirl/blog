@@ -7,7 +7,7 @@ $(function() {
   });
   var bar = echarts.init(document.getElementById('bar'));
   bar.showLoading();
-  $.get('/blog/admin/visit.php').done(function(data) {
+  $.get('/admin/api/visit.php').done(function(data) {
     bar.hideLoading();
     var xdata = [];
     var ydata = [];

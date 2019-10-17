@@ -1,6 +1,6 @@
 @import 'common';
 @import 'var';
-@media (min-width:320px) and (max-width:768px) {
+@media (max-width:768px) {
   .blog_main {
     padding-top:60px;
     .mainbar {
@@ -44,26 +44,7 @@ body {
           h4 {
             color: @fontColor;
             padding-bottom:15px;
-            position: relative;
             border-bottom:solid 1px #eaeaea;
-            &::before {
-              content: '';
-              position: absolute;
-              left:0;
-              bottom:0;
-              width:40px;
-              height:2px;
-              background-color: @mainColor;
-            }
-            &::after {
-              content: '';
-              position: absolute;
-              left:40px;
-              bottom:0;
-              width:40px;
-              height:2px;
-              background-color: @helpColor;
-            }
           }
           .comment_block {
             border-bottom: solid 1px #f0f0f0;

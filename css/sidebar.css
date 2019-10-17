@@ -1,4 +1,4 @@
-@charset "utf-8";
+@charset 'utf-8';
 html {
   width: 100%;
   height: 100%;
@@ -62,26 +62,7 @@ img {
 .sidebar .hot h3 {
   color: #111;
   font-size: 16px;
-  position: relative;
   padding-bottom: 20px;
-}
-.sidebar .hot h3::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #17a2b8;
-}
-.sidebar .hot h3::after {
-  content: "";
-  position: absolute;
-  left: 40px;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #fd5c63;
 }
 .sidebar .hot ul {
   width: 100%;
@@ -113,24 +94,6 @@ img {
   font-size: 16px;
   position: relative;
   padding-bottom: 20px;
-}
-.sidebar .new h3::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #17a2b8;
-}
-.sidebar .new h3::after {
-  content: "";
-  position: absolute;
-  left: 40px;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: #fd5c63;
 }
 .sidebar .new ul {
   width: 100%;

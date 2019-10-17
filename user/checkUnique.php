@@ -1,6 +1,6 @@
 <?php
-require_once '../config.php';
-require_once '../functions.php';
+$root_path = $_SERVER['DOCUMENT_ROOT'];
+require_once($root_path.'/functions.php');
 // 可能传过来的参数：邮箱，用户名，密码，unique;
 // 还有unique参数，如果没传unique就表示是register页面的查询，是检测邮箱和用户名的唯一性
 // 如果有unique参数，就表示是login页面的查询，是检测用户名是否注册
